@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 
 public class M_Utilisateur {
     private Db_mariadb db;
-    private int id;
+    private int idUtilisateur;
     private String login;
     private String mdp;
     private String mail;
@@ -17,14 +17,14 @@ public class M_Utilisateur {
     private LocalDateTime dateCreation;
     private int idStatut;
     private String codeRole;
+    private String comment;
 
-    // Constructeur de récupération depuis la BDD
-    public M_Utilisateur(Db_mariadb db, int id) throws SQLException {
+    public M_Utilisateur(Db_mariadb db, int idUtilisateur) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM UTILISATEURS WHERE id = " + id;
+        String sql = "SELECT * FROM UTILISATEURS WHERE id_utilisateur = " + idUtilisateur;
         ResultSet res = db.sqlSelect(sql);
         if (res.first()) {
-            this.id = id;
+            this.idUtilisateur = idUtilisateur;
             this.login = res.getString("login");
             this.mdp = res.getString("mdp");
             this.mail = res.getString("mail");
@@ -33,11 +33,11 @@ public class M_Utilisateur {
             this.dateCreation = res.getObject("date_creation", LocalDateTime.class);
             this.idStatut = res.getInt("id_statut");
             this.codeRole = res.getString("code_role");
+            this.comment = res.getString("comment");
         }
     }
 
-    // Constructeur d’insertion
-    public M_Utilisateur(Db_mariadb db, String login, String mdp, String mail, String mailToken, LocalDateTime mailDate, int idStatut, String codeRole) throws SQLException {
+    public M_Utilisateur(Db_mariadb db, String login, String mdp, String mail, String mailToken, LocalDateTime mailDate, int idStatut, String codeRole, String comment) throws SQLException {
         this.db = db;
         this.login = login;
         this.mdp = BCrypt.withDefaults().hashToString(12, mdp.toCharArray());
@@ -47,21 +47,22 @@ public class M_Utilisateur {
         this.dateCreation = LocalDateTime.now();
         this.idStatut = idStatut;
         this.codeRole = codeRole;
+        this.comment = comment;
 
-        String sql = "INSERT INTO UTILISATEURS (login, mdp, mail, mail_token, mail_date, date_creation, id_statut, code_role) VALUES ('"
-                + login + "', '" + this.mdp + "', '" + mail + "', '" + mailToken + "', '"
-                + mailDate + "', '" + dateCreation + "', " + idStatut + ", '" + codeRole + "')";
+        String sql = "INSERT INTO UTILISATEURS (login, mdp, mail, mail_token, mail_date, date_creation, id_statut, code_role, comment) VALUES ('"
+        + login + "', '" + this.mdp + "', '" + mail + "', '" + mailToken + "', '"
+        + mailDate + "', '" + dateCreation + "', " + idStatut + ", '" + codeRole + "', '" + comment + "')";
+
         db.sqlExec(sql);
 
         ResultSet res = db.sqlLastId();
         if (res.first()) {
-            this.id = res.getInt("id");
+            this.idUtilisateur = res.getInt("id");
         }
     }
 
-    // Getters
     public int getId() {
-        return id;
+        return idUtilisateur;
     }
 
     public String getLogin() {
@@ -96,7 +97,6 @@ public class M_Utilisateur {
         return codeRole;
     }
 
-    // Setters
     public void setLogin(String login) {
         this.login = login;
     }
@@ -121,94 +121,46 @@ public class M_Utilisateur {
         this.codeRole = codeRole;
     }
 
-    // Modification du mot de passe
     public void setMdp(String nouveauMp) {
         this.mdp = BCrypt.withDefaults().hashToString(12, nouveauMp.toCharArray());
     }
 
-    // Mise à jour de l'utilisateur dans la BDD
     public void update() throws SQLException {
         String sql = "UPDATE UTILISATEURS SET login='" + login + "', mdp='" + mdp + "', mail='" + mail +
-                "', mail_token='" + mailToken + "', mail_date='" + mailDate + "', date_creation='" + dateCreation + "', " +
-                "id_statut=" + idStatut + ", code_role='" + codeRole + "' WHERE id=" + id;
-        db.sqlExec(sql);
+        "', mail_token='" + mailToken + "', mail_date='" + mailDate + "', date_creation='" + dateCreation + "', " +
+        "id_statut=" + idStatut + ", code_role='" + codeRole + "', comment='" + comment + "' WHERE id_utilisateur=" + idUtilisateur;
     }
 
-    // Suppression de l'utilisateur
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM UTILISATEURS WHERE id = " + id);
+        db.sqlExec("DELETE FROM UTILISATEURS WHERE id_utilisateur = " + idUtilisateur);
     }
 
-    // Connexion d'un utilisateur
     public static M_Utilisateur connexion_log(Db_mariadb db, String login, String mdp) throws SQLException {
         String sql = "SELECT * FROM UTILISATEURS WHERE login= '" + login + "'";
         ResultSet res = db.sqlSelect(sql);
         if (res.first()) {
             String hash = res.getString("mdp");
             if (BCrypt.verifyer().verify(mdp.toCharArray(), hash).verified) {
-                return new M_Utilisateur(db, res.getInt("id"));
+                return new M_Utilisateur(db, res.getInt("id_utilisateur"));
             }
         }
         return null;
     }
 
-    // Récupérer tous les utilisateurs
     public static LinkedHashMap<Integer, M_Utilisateur> getRecords(Db_mariadb db) throws SQLException {
         LinkedHashMap<Integer, M_Utilisateur> utilisateurs = new LinkedHashMap<>();
         ResultSet res = db.sqlSelect("SELECT * FROM UTILISATEURS ORDER BY login");
         while (res.next()) {
-            M_Utilisateur u = new M_Utilisateur(db, res.getInt("id"));
+            M_Utilisateur u = new M_Utilisateur(db, res.getInt("id_utilisateur"));
             utilisateurs.put(u.getId(), u);
         }
         return utilisateurs;
-    }
-    
-    // Méthode pour obtenir tous les enfants de cet individu en une seule requête
-    public LinkedHashMap<Integer, M_Utilisateur> getEnfants() throws SQLException {
-        LinkedHashMap<Integer, M_Utilisateur> enfants = new LinkedHashMap<>();
-
-        // UNION pour avoir le résultat des deux requêtes
-        String sql = "SELECT id_membre FROM RELATIONS_MERE WHERE id_mere = ? "
-                    + "UNION "
-                    + "SELECT id_membre FROM RELATIONS_PERE WHERE id_pere = ?";
-
-        // Exécuter la requête en passant l'id de l'individu pour la mère et le père
-        ResultSet res = db.sqlSelect(sql);
-        while (res.next()) {
-            int enfantId = res.getInt("id_membre");
-            M_Utilisateur enfant = new M_Utilisateur(db, enfantId);
-            enfants.put(enfantId, enfant);
-        }
-
-        return enfants;
-    }
-    
-    // Obtenir l'a mère d'un individu
-    public M_Utilisateur getMere() throws SQLException {
-        String sql = "SELECT id_mere FROM RELATIONS_MERE WHERE id_membre = " + this.id;
-        ResultSet res = db.sqlSelect(sql);
-        if (res.first()) {
-            int mereId = res.getInt("id_mere");
-            return new M_Utilisateur(db, mereId);
-        }
-        return null;
-    }
-
-    // Obtenir le père d'un individu
-    public M_Utilisateur getPere() throws SQLException {
-        String sql = "SELECT id_pere FROM RELATIONS_PERE WHERE id_membre = " + this.id;
-        ResultSet res = db.sqlSelect(sql);
-        if (res.first()) {
-            int pereId = res.getInt("id_pere");
-            return new M_Utilisateur(db, pereId);
-        }
-        return null;
     }
 
     @Override
     public String toString() {
         return "M_Utilisateur{" +
-                "id=" + id +
+                "id_utilisateur=" + idUtilisateur +
                 ", login='" + login + '\'' +
                 ", mail='" + mail + '\'' +
                 ", mailToken='" + mailToken + '\'' +

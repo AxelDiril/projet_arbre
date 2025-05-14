@@ -27,22 +27,19 @@ public class V_Main extends javax.swing.JFrame {
     private JMenuItem mi;
 
     private void scanMenus(JMenuBar menuBar) {
-        // Parcourir les éléments de la JMenuBar
         for (int i = 0; i < menuBar.getMenuCount(); i++) {
             mn = menuBar.getMenu(i);
             mn.setVisible(false);
-            menuMap.put(mn.getName(), mn); // Ajoute les menus à la map
-            // Scanner les éléments (items) de chaque menu
+            menuMap.put(mn.getName(), mn);
             for (int j = 0; j < mn.getItemCount(); j++) {
                 mi = mn.getItem(j);
                 mi.setVisible(false);
-                menuMap.put(mi.getName(), mi); // Ajoute les items du menu à la map
+                menuMap.put(mi.getName(), mi);
             }
         }
     }
 
     private void aff_menus(M_Utilisateur unUtil) throws SQLException {
-        // Récupérer les actionsde l'utilisateur
         LinkedHashMap<String, M_Action> lesActions = leControl.actions_Util(unUtil);
         for (String cle : lesActions.keySet()) {
             M_Action uneAction = lesActions.get(cle);

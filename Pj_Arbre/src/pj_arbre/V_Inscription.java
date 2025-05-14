@@ -153,7 +153,6 @@ public class V_Inscription extends javax.swing.JFrame {
         String mdp = new String(pw_mp_nouv.getPassword());
         String mdpConf = new String(pw_mp_conf.getPassword());
 
-        // Réinitialise le message d'erreur
         lb_erreur.setVisible(false);
 
         if (login.isEmpty() || mail.isEmpty() || mdp.isEmpty() || mdpConf.isEmpty()) {

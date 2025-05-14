@@ -294,7 +294,6 @@ public class V_MonCompte extends javax.swing.JDialog {
     }//GEN-LAST:event_bt_modifierActionPerformed
 
     private void bt_enregistrer_mdpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enregistrer_mdpActionPerformed
-        // Récupération correcte des mots de passe sous forme de chaînes
         String ancienMp = new String(pw_mp_ancien.getPassword());
         String nouveauMp = new String(pw_mp_nouv.getPassword());
         String confMp = new String(pw_mp_conf.getPassword());

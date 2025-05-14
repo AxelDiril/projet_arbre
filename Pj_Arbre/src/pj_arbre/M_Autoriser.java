@@ -9,7 +9,6 @@ public class M_Autoriser {
     private String codeRole;
     private String codeAction;
 
-    // Constructeur de récupération depuis la BDD
     public M_Autoriser(Db_mariadb db, String codeRole, String codeAction) throws SQLException {
         this.db = db;
         String sql = "SELECT * FROM AUTORISER WHERE code_role = '" + codeRole + "' AND code_action = '" + codeAction + "'";
@@ -22,7 +21,6 @@ public class M_Autoriser {
         }
     }
 
-    // Getters
     public String getCodeRole() {
         return codeRole;
     }
@@ -31,7 +29,6 @@ public class M_Autoriser {
         return codeAction;
     }
 
-    // Setters
     public void setCodeRole(String codeRole) {
         this.codeRole = codeRole;
     }
@@ -40,7 +37,6 @@ public class M_Autoriser {
         this.codeAction = codeAction;
     }
 
-    // Mise à jour (inutile ici car PK ne change pas — à personnaliser si besoin)
     public void update(String newCodeRole, String newCodeAction) throws SQLException {
         String sql = "UPDATE AUTORISER SET code_role = '" + newCodeRole + "', code_action = '" + newCodeAction + "'" +
                      " WHERE code_role = '" + codeRole + "' AND code_action = '" + codeAction + "'";
@@ -49,13 +45,11 @@ public class M_Autoriser {
         this.codeAction = newCodeAction;
     }
 
-    // Suppression
     public void delete() throws SQLException {
         String sql = "DELETE FROM AUTORISER WHERE code_role = '" + codeRole + "' AND code_action = '" + codeAction + "'";
         db.sqlExec(sql);
     }
 
-    // Récupération de tous les enregistrements
     public static LinkedHashMap<String, M_Autoriser> getRecords(Db_mariadb db) throws SQLException {
         LinkedHashMap<String, M_Autoriser> autorisations = new LinkedHashMap<>();
         String sql = "SELECT * FROM AUTORISER";
@@ -69,7 +63,6 @@ public class M_Autoriser {
         return autorisations;
     }
 
-    // Ajout d'une autorisation
     public static void addAutorisation(Db_mariadb db, String codeRole, String codeAction) throws SQLException {
         String sql = "INSERT INTO AUTORISER (code_role, code_action) VALUES ('" + codeRole + "', '" + codeAction + "')";
         db.sqlExec(sql);

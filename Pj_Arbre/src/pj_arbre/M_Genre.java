@@ -9,7 +9,6 @@ public class M_Genre {
     private String codeGenre;
     private String libelle;
 
-    // Constructeur de récupération depuis la BDD
     public M_Genre(Db_mariadb db, String codeGenre) throws SQLException {
         this.db = db;
         String sql = "SELECT * FROM GENRES WHERE code_genre = '" + codeGenre + "'";
@@ -20,7 +19,6 @@ public class M_Genre {
         }
     }
 
-    // Constructeur d’insertion
     public M_Genre(Db_mariadb db, String codeGenre, String libelle) throws SQLException {
         this.db = db;
         this.codeGenre = codeGenre;
@@ -30,7 +28,6 @@ public class M_Genre {
         db.sqlExec(sql);
     }
 
-    // Getters
     public String getCodeGenre() {
         return codeGenre;
     }
@@ -39,23 +36,19 @@ public class M_Genre {
         return libelle;
     }
 
-    // Setter pour libelle uniquement
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
 
-    // Mise à jour
     public void update() throws SQLException {
         String sql = "UPDATE GENRES SET libelle = '" + libelle + "' WHERE code_genre = '" + codeGenre + "'";
         db.sqlExec(sql);
     }
 
-    // Suppression
     public void delete() throws SQLException {
         db.sqlExec("DELETE FROM GENRES WHERE code_genre = '" + codeGenre + "'");
     }
 
-    // Récupération de tous les genres
     public static LinkedHashMap<String, M_Genre> getRecords(Db_mariadb db) throws SQLException {
         LinkedHashMap<String, M_Genre> genres = new LinkedHashMap<>();
         ResultSet res = db.sqlSelect("SELECT * FROM GENRES ORDER BY libelle");

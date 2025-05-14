@@ -6,40 +6,35 @@ import java.util.LinkedHashMap;
 
 public class M_Acceder {
     private Db_mariadb db;
-    private int id;
+    private int idUtilisateur;
     private int idArbre;
     private String codeAcces;
 
-    // Constructeur de récupération depuis la BDD
-    public M_Acceder(Db_mariadb db, int id, int idArbre) throws SQLException {
+    public M_Acceder(Db_mariadb db, int idUtilisateur, int idArbre) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM ACCEDER WHERE id = " + id + " AND id_arbre = " + idArbre;
+        String sql = "SELECT * FROM ACCEDER WHERE id_utilisateur = " + idUtilisateur + " AND id_arbre = " + idArbre;
         ResultSet res = db.sqlSelect(sql);
         if (res.first()) {
-            this.id = id;
+            this.idUtilisateur = idUtilisateur;
             this.idArbre = idArbre;
             this.codeAcces = res.getString("code_acces");
         }
     }
 
-    // Constructeur d’insertion
-    public M_Acceder(Db_mariadb db, int id, int idArbre, String codeAcces) throws SQLException {
+    public M_Acceder(Db_mariadb db, int idUtilisateur, int idArbre, String codeAcces) throws SQLException {
         this.db = db;
-        this.id = id;
+        this.idUtilisateur = idUtilisateur;
         this.idArbre = idArbre;
         this.codeAcces = codeAcces;
 
-        // Préparer la requête d'insertion avec l'id_utilisateur, id_arbre et code_acces
-        String sql = "INSERT INTO ACCEDER (id, id_arbre, code_acces) VALUES (" 
-                        + id + ", " + idArbre + ", '" + codeAcces + "')";
+        String sql = "INSERT INTO ACCEDER (id_utilisateur, id_arbre, code_acces) VALUES (" 
+                        + idUtilisateur + ", " + idArbre + ", '" + codeAcces + "')";
         
-        // Exécuter la requête d'insertion
         db.sqlExec(sql);
     }
 
-    // Getters
     public int getId() {
-        return id;
+        return idUtilisateur;
     }
 
     public int getIdArbre() {
@@ -50,7 +45,6 @@ public class M_Acceder {
         return codeAcces;
     }
 
-    // Setters
     public void setIdArbre(int idArbre) {
         this.idArbre = idArbre;
     }
@@ -59,26 +53,24 @@ public class M_Acceder {
         this.codeAcces = codeAcces;
     }
 
-    // Mise à jour
     public void update() throws SQLException {
-        String sql = "UPDATE ACCEDER SET id_arbre = " + idArbre + ", code_acces = '" + codeAcces + "' WHERE id = " + id;
+        String sql = "UPDATE ACCEDER SET id_arbre = " + idArbre + ", code_acces = '" + codeAcces + "' WHERE id_utilisateur = " + idUtilisateur;
         db.sqlExec(sql);
     }
 
-    // Suppression
     public void delete() throws SQLException {
-        String sql = "DELETE FROM ACCEDER WHERE id = " + id;
+        String sql = "DELETE FROM ACCEDER WHERE id_utilisateur = " + idUtilisateur;
         db.sqlExec(sql);
     }
     
     public static LinkedHashMap<Integer, M_Acceder> getAccesUtilisateur(Db_mariadb db, int idUtilisateur) throws SQLException {
         LinkedHashMap<Integer, M_Acceder> lesAcces = new LinkedHashMap<>();
 
-        String sql = "SELECT * FROM ACCEDER WHERE id = " + idUtilisateur + " ORDER BY id_arbre";
+        String sql = "SELECT * FROM ACCEDER WHERE id_utilisateur = " + idUtilisateur + " ORDER BY id_arbre";
         ResultSet res = db.sqlSelect(sql);
 
         while (res.next()) {
-            int id = res.getInt("id");
+            int id = res.getInt("id_utilisateur");
             int idArbre = res.getInt("id_arbre");
             M_Acceder unAcces = new M_Acceder(db, id, idArbre);
             lesAcces.put(id, unAcces);
@@ -90,7 +82,7 @@ public class M_Acceder {
     @Override
     public String toString() {
         return "M_Acceder{" +
-                "id=" + id +
+                "idUtilisateur=" + idUtilisateur +
                 ", idArbre=" + idArbre +
                 ", codeAcces='" + codeAcces + '\'' +
                 '}';

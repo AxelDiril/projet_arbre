@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 public class M_Type_Evenement {
     private Db_mariadb db;
     private int idTypeEvenement;
-    private String label;
+    private String libelle;
 
     // Constructeur de récupération depuis la BDD
     public M_Type_Evenement(Db_mariadb db, int idTypeEvenement) throws SQLException {
@@ -16,16 +16,16 @@ public class M_Type_Evenement {
         ResultSet res = db.sqlSelect(sql);
         if (res.first()) {
             this.idTypeEvenement = idTypeEvenement;
-            this.label = res.getString("label");
+            this.libelle = res.getString("libelle");
         }
     }
 
     // Constructeur d’insertion
-    public M_Type_Evenement(Db_mariadb db, String label, int nbPersonnesMaxi) throws SQLException {
+    public M_Type_Evenement(Db_mariadb db, String libelle) throws SQLException {
         this.db = db;
-        this.label = label;
+        this.libelle = libelle;
 
-        String sql = "INSERT INTO TYPE_EVENEMENT (label) VALUES ('" + label + ")";
+        String sql = "INSERT INTO TYPE_EVENEMENT (libelle) VALUES ('" + libelle + ")";
         db.sqlExec(sql);
 
         ResultSet res = db.sqlLastId();
@@ -40,17 +40,17 @@ public class M_Type_Evenement {
     }
 
     public String getLabel() {
-        return label;
+        return libelle;
     }
 
-    // Setter pour label et nbPersonnesMaxi
-    public void setLabel(String label) {
-        this.label = label;
+    // Setter pour libelle et nbPersonnesMaxi
+    public void setLabel(String libelle) {
+        this.libelle = libelle;
     }
 
     // Mise à jour
     public void update() throws SQLException {
-        String sql = "UPDATE TYPE_EVENEMENT SET label = '" + label + " WHERE id_type_evenement = " + idTypeEvenement;
+        String sql = "UPDATE TYPE_EVENEMENT SET libelle = '" + libelle + " WHERE id_type_evenement = " + idTypeEvenement;
         db.sqlExec(sql);
     }
 
@@ -62,7 +62,7 @@ public class M_Type_Evenement {
     // Récupération de tous les types d'événements
     public static LinkedHashMap<Integer, M_Type_Evenement> getRecords(Db_mariadb db) throws SQLException {
         LinkedHashMap<Integer, M_Type_Evenement> typesEvenement = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM TYPE_EVENEMENT ORDER BY label");
+        ResultSet res = db.sqlSelect("SELECT * FROM TYPE_EVENEMENT ORDER BY libelle");
         while (res.next()) {
             M_Type_Evenement t = new M_Type_Evenement(db, res.getInt("id_type_evenement"));
             typesEvenement.put(t.getIdTypeEvenement(), t);
@@ -74,7 +74,7 @@ public class M_Type_Evenement {
     public String toString() {
         return "M_TypeEvenement{" +
                 "idTypeEvenement=" + idTypeEvenement +
-                ", label='" + label +
+                ", libelle='" + libelle +
                 '}';
     }
 }

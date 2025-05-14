@@ -9,7 +9,6 @@ public class M_Acces_Arbre {
     private String codeAcces;
     private String libelle;
 
-    // Constructeur de récupération depuis la BDD
     public M_Acces_Arbre(Db_mariadb db, String codeAcces) throws SQLException {
         this.db = db;
         String sql = "SELECT * FROM ACCES_ARBRE WHERE code_acces = '" + codeAcces + "'";
@@ -20,7 +19,6 @@ public class M_Acces_Arbre {
         }
     }
 
-    // Constructeur d’insertion
     public M_Acces_Arbre(Db_mariadb db, String codeAcces, String libelle) throws SQLException {
         this.db = db;
         this.codeAcces = codeAcces;
@@ -30,7 +28,6 @@ public class M_Acces_Arbre {
         db.sqlExec(sql);
     }
 
-    // Getters
     public String getCodeAcces() {
         return codeAcces;
     }
@@ -39,23 +36,19 @@ public class M_Acces_Arbre {
         return libelle;
     }
 
-    // Setter pour libelle uniquement
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
 
-    // Mise à jour
     public void update() throws SQLException {
         String sql = "UPDATE ACCES_ARBRE SET libelle = '" + libelle + "' WHERE code_acces = '" + codeAcces + "'";
         db.sqlExec(sql);
     }
 
-    // Suppression
     public void delete() throws SQLException {
         db.sqlExec("DELETE FROM ACCES_ARBRE WHERE code_acces = '" + codeAcces + "'");
     }
 
-    // Récupération de tous les accès
     public static LinkedHashMap<String, M_Acces_Arbre> getRecords(Db_mariadb db) throws SQLException {
         LinkedHashMap<String, M_Acces_Arbre> acces = new LinkedHashMap<>();
         ResultSet res = db.sqlSelect("SELECT * FROM ACCES_ARBRE ORDER BY libelle");

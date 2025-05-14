@@ -43,11 +43,9 @@ public class V_MesArbres extends javax.swing.JDialog {
         this.lesAcces = lesAcces;
         this.lesArbres = lesArbres;
 
-        // Initialisation du modèle de table
         dtm_tb_arbres = (DefaultTableModel) tb_arbres.getModel();
         dtm_tb_arbres.setRowCount(0); // Vider le tableau avant de remplir
 
-        // Remplir le tableau avec les accès
         for (M_Acceder unAcces : this.lesAccesUtilisateur.values()) {
             int idArbre = unAcces.getIdArbre();
             String codeAcces = unAcces.getCodeAcces();
@@ -173,16 +171,8 @@ public class V_MesArbres extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // Supprimer l'arbre ou retirer son accès
     private void bt_supprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_supprimerActionPerformed
-//        int reponse = JOptionPane.showConfirmDialog(this, "Etes-vous sûr de vouloir supprimer l'utilisateur n°" + cle + " ?", "Suppression", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-//        if(reponse == JOptionPane.YES_OPTION){
-//            try {
-//                leControl.delete_Util(cle);
-//            } catch (SQLException ex) {
-//                Logger.getLogger(V_MesArbres.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+
     }//GEN-LAST:event_bt_supprimerActionPerformed
 
     private void bt_creerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_creerActionPerformed
@@ -192,7 +182,6 @@ public class V_MesArbres extends javax.swing.JDialog {
     private void tb_arbresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_arbresMouseClicked
         ligne = tb_arbres.getSelectedRow();
         if (ligne != -1) {
-            // Récupère la clé correspondante à la ligne sélectionnée
             Object[] cles = lesAccesUtilisateur.keySet().toArray();
             cle = (int) cles[ligne];
         }

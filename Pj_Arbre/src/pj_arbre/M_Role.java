@@ -9,7 +9,6 @@ public class M_Role {
     private String codeRole;
     private String libelle;
 
-    // Constructeur de récupération
     public M_Role(Db_mariadb db, String codeRole) throws SQLException {
         this.db = db;
         String sql = "SELECT * FROM ROLES WHERE code_role = '" + codeRole + "'";
@@ -20,7 +19,6 @@ public class M_Role {
         }
     }
 
-    // Constructeur d’insertion
     public M_Role(Db_mariadb db, String codeRole, String libelle) throws SQLException {
         this.db = db;
         this.codeRole = codeRole;

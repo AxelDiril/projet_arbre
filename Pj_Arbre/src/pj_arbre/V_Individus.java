@@ -122,6 +122,12 @@ public class V_Individus extends javax.swing.JDialog {
         bt_modifier = new javax.swing.JButton();
         sc_util = new javax.swing.JScrollPane();
         tb_individus = new javax.swing.JTable();
+        co_types = new javax.swing.JComboBox<>();
+        lb_date = new javax.swing.JLabel();
+        ed_date = new javax.swing.JFormattedTextField();
+        lb_lieu = new javax.swing.JLabel();
+        ed_lieu = new javax.swing.JTextField();
+        bt_enregistrer_evenement = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestion des utilisateurs");
@@ -159,7 +165,7 @@ public class V_Individus extends javax.swing.JDialog {
         }
 
         getContentPane().add(sc_evenements);
-        sc_evenements.setBounds(450, 290, 360, 190);
+        sc_evenements.setBounds(590, 130, 360, 190);
 
         lb_nom.setText("Nom :");
         getContentPane().add(lb_nom);
@@ -265,7 +271,7 @@ public class V_Individus extends javax.swing.JDialog {
         );
 
         getContentPane().add(pn_cms);
-        pn_cms.setBounds(660, 60, 170, 180);
+        pn_cms.setBounds(330, 10, 170, 180);
 
         tb_individus.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -301,6 +307,31 @@ public class V_Individus extends javax.swing.JDialog {
 
         getContentPane().add(sc_util);
         sc_util.setBounds(22, 14, 302, 256);
+
+        co_types.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sélectionnez un évènement" }));
+        co_types.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                co_typesActionPerformed(evt);
+            }
+        });
+        getContentPane().add(co_types);
+        co_types.setBounds(660, 390, 320, 35);
+
+        lb_date.setText("Date :");
+        getContentPane().add(lb_date);
+        lb_date.setBounds(600, 440, 53, 27);
+        getContentPane().add(ed_date);
+        ed_date.setBounds(660, 440, 320, 35);
+
+        lb_lieu.setText("Lieu :");
+        getContentPane().add(lb_lieu);
+        lb_lieu.setBounds(600, 490, 48, 27);
+        getContentPane().add(ed_lieu);
+        ed_lieu.setBounds(660, 490, 320, 35);
+
+        bt_enregistrer_evenement.setText("Enregistrer évènement");
+        getContentPane().add(bt_enregistrer_evenement);
+        bt_enregistrer_evenement.setBounds(660, 540, 320, 35);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -472,6 +503,10 @@ public class V_Individus extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tb_individusMouseClicked
 
+    private void co_typesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_co_typesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_co_typesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -519,12 +554,18 @@ public class V_Individus extends javax.swing.JDialog {
     private javax.swing.JButton bt_ajout;
     private javax.swing.JButton bt_annuler;
     private javax.swing.JButton bt_enregistrer;
+    private javax.swing.JButton bt_enregistrer_evenement;
     private javax.swing.JButton bt_modifier;
     private javax.swing.JButton bt_supprimer;
     private javax.swing.JComboBox<String> co_genre;
+    private javax.swing.JComboBox<String> co_types;
+    private javax.swing.JFormattedTextField ed_date;
+    private javax.swing.JTextField ed_lieu;
     private javax.swing.JTextField ed_nom;
     private javax.swing.JTextField ed_prenom;
+    private javax.swing.JLabel lb_date;
     private javax.swing.JLabel lb_genre;
+    private javax.swing.JLabel lb_lieu;
     private javax.swing.JLabel lb_nom;
     private javax.swing.JLabel lb_prenom;
     private javax.swing.JPanel pn_am;

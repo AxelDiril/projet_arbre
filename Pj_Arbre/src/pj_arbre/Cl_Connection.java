@@ -4,10 +4,6 @@
  */
 package pj_arbre;
 
-/**
- *
- * @author dirila
- */
 public class Cl_Connection {
     public static String url = "//falbala.futaie.org:3306/dirila_arbre";
     public static String login = "dirila";

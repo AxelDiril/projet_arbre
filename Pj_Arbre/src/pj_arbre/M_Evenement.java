@@ -10,9 +10,8 @@ public class M_Evenement {
     private int idEvenement;
     private LocalDate date;
     private int idTypeEvenement;
-    private String lieu; // <-- changement ici
+    private String lieu;
 
-    // Constructeur depuis BDD
     public M_Evenement(Db_mariadb db, int idEvenement) throws SQLException {
         this.db = db;
         String sql = "SELECT * FROM EVENEMENTS WHERE id_evenement = " + idEvenement;
@@ -21,11 +20,10 @@ public class M_Evenement {
             this.idEvenement = idEvenement;
             this.date = res.getObject("date", LocalDate.class);
             this.idTypeEvenement = res.getInt("id_type_evenement");
-            this.lieu = res.getString("lieu"); // <-- ici aussi
+            this.lieu = res.getString("lieu");
         }
     }
 
-    // Constructeur d’insertion
     public M_Evenement(Db_mariadb db, LocalDate date, int idTypeEvenement, String lieu) throws SQLException {
         this.db = db;
         this.date = date;
@@ -44,7 +42,6 @@ public class M_Evenement {
         }
     }
 
-    // Getters
     public int getIdEvenement() {
         return idEvenement;
     }
@@ -61,7 +58,6 @@ public class M_Evenement {
         return lieu;
     }
 
-    // Setters
     public void setDate(LocalDate date) {
         this.date = date;
     }
@@ -74,7 +70,6 @@ public class M_Evenement {
         this.lieu = lieu;
     }
 
-    // Mise à jour
     public void update() throws SQLException {
         String sql = "UPDATE EVENEMENTS SET " +
                 "date = " + (date != null ? "'" + date + "'" : "NULL") + ", " +
@@ -84,7 +79,6 @@ public class M_Evenement {
         db.sqlExec(sql);
     }
 
-    // Suppression
     public void delete() throws SQLException {
         String sql = "DELETE FROM EVENEMENTS WHERE id_evenement = " + idEvenement;
         db.sqlExec(sql);
@@ -107,7 +101,7 @@ public class M_Evenement {
         String sql = "SELECT e.id_evenement " +
                      "FROM EVENEMENTS e " +
                      "JOIN AVOIR_EVENEMENT ae ON e.id_evenement = ae.id_evenement " +
-                     "WHERE ae.id_membre = " + idMembre + " " +
+                     "WHERE ae.id_individu = " + idMembre + " " +
                      "ORDER BY e.date";
 
         ResultSet res = db.sqlSelect(sql);

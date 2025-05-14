@@ -59,11 +59,12 @@ public class C_Arbre {
     }
     
     public void aff_V_MesArbres() throws SQLException {
+        System.out.println("Afficher mes arbres");
         LinkedHashMap<Integer, M_Acceder> lesAccesUtilisateur = M_Acceder.getAccesUtilisateur(baseFU, utilConnecte.getId());
         LinkedHashMap<Integer, M_Arbre> lesArbres = M_Arbre.getRecords(baseFU);
         LinkedHashMap<String, M_Acces_Arbre> lesAcces = M_Acces_Arbre.getRecords(baseFU);
 
-        fm_MesArbres.afficher(lesAccesUtilisateur, lesAcces, lesArbres );
+        fm_MesArbres.afficher(lesAccesUtilisateur, lesAcces, lesArbres);
     }
     
     public void aff_V_Individus(M_Arbre unArbre) throws SQLException{
@@ -78,7 +79,6 @@ public class C_Arbre {
     }
 
     public void updateIndividu(int idIndividu, String nom, String prenom, String codeGenre, M_Arbre unArbre) throws SQLException {
-        // Crée un objet M_Individu avec les nouvelles informations
         M_Individu unIndividu = new M_Individu(baseFU, idIndividu);
 
         unIndividu.setNom(nom);
@@ -102,25 +102,9 @@ public class C_Arbre {
         LocalDateTime mailDate = LocalDateTime.now();
 
         M_Utilisateur unUtilisateur = new M_Utilisateur(
-            baseFU, login, mdp, mail, "", mailDate, 1, "U"
+            baseFU, login, mdp, mail, "", mailDate, 1, "U",""
         );
     }
-    
-//    public void update_Util(int id, String nom, String prenom, String mail, String login, String telephone, String mp, LocalDateTime dateDerModifMP, boolean actif, int idRole) throws SQLException{
-//        unUtilisateur = lesUtilisateurs.get(id);
-//        unUtilisateur.setMail(mail);
-//        unUtilisateur.setLogin(login);
-//        
-//        unUtilisateur.update();
-//
-//        aff_V_Util();
-//    }
-    
-//    public void delete_Util(int cle) throws SQLException{
-//        unUtilisateur = lesUtilisateurs.get(cle);
-//        unUtilisateur.delete();
-//        aff_V_Util();
-//    }
     
     public void update_Compte(int id, String login, String mail) throws SQLException{
         lesUtilisateurs = M_Utilisateur.getRecords(baseFU);
@@ -137,10 +121,6 @@ public class C_Arbre {
         M_Utilisateur unUtil = lesUtilisateurs.get(id);
 
         String mpHash = unUtil.getMdp();
-
-        System.out.println("Hash actuel depuis l’objet : " + mpHash);
-        System.out.println("Ancien mot de passe saisi : " + ancienMp);
-        System.out.println("Résultat comparaison : " + BCrypt.verifyer().verify(ancienMp.toCharArray(), mpHash).verified);
         
         if (BCrypt.verifyer().verify(ancienMp.toCharArray(), mpHash).verified) {
             unUtil.setMdp(nouveauMp);
@@ -169,7 +149,6 @@ public class C_Arbre {
         baseFU = new Db_mariadb(Cl_Connection.url, Cl_Connection.login, Cl_Connection.password);
     }
     
-    // Créer un nouvel arbre et donner un accès "C" à son créateur
     public void insertArbre(String nom, int idUtilisateur) throws SQLException{
         M_Arbre unArbre = new M_Arbre(baseFU,nom,idUtilisateur);
         M_Acceder unAcces = new M_Acceder(baseFU,idUtilisateur,unArbre.getIdArbre(),"C");

@@ -10,7 +10,6 @@ public class M_Arbre {
     private String nom;
     private int idCreateur;
 
-    // Constructeur de récupération depuis la BDD
     public M_Arbre(Db_mariadb db, int idArbre) throws SQLException {
         this.db = db;
         String sql = "SELECT * FROM ARBRES WHERE id_arbre = " + idArbre;
