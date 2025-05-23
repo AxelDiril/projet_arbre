@@ -8,166 +8,191 @@ import java.util.LinkedHashMap;
 
 public class M_Utilisateur {
     private Db_mariadb db;
-    private int idUtilisateur;
-    private String login;
-    private String mdp;
-    private String mail;
-    private String mailToken;
-    private LocalDateTime mailDate;
-    private LocalDateTime dateCreation;
-    private int idStatut;
-    private String codeRole;
-    private String comment;
+    private int iIdUtilisateur;
+    private String strLogin;
+    private String strMdp;
+    private String strMail;
+    private String strMailToken;
+    private LocalDateTime dtMailDate;
+    private LocalDateTime dtDateCreation;
+    private int iIdStatut;
+    private String strCodeRole;
+    private String strComment;
 
-    public M_Utilisateur(Db_mariadb db, int idUtilisateur) throws SQLException {
+    public M_Utilisateur(Db_mariadb db, int iIdUtilisateur) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM UTILISATEURS WHERE id_utilisateur = " + idUtilisateur;
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql =  "SELECT * FROM UTILISATEURS WHERE id_utilisateur = " + iIdUtilisateur;
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
-            this.idUtilisateur = idUtilisateur;
-            this.login = res.getString("login");
-            this.mdp = res.getString("mdp");
-            this.mail = res.getString("mail");
-            this.mailToken = res.getString("mail_token");
-            this.mailDate = res.getObject("mail_date", LocalDateTime.class);
-            this.dateCreation = res.getObject("date_creation", LocalDateTime.class);
-            this.idStatut = res.getInt("id_statut");
-            this.codeRole = res.getString("code_role");
-            this.comment = res.getString("comment");
+            this.iIdUtilisateur = iIdUtilisateur;
+            this.strLogin = res.getString("login");
+            this.strMdp = res.getString("mdp");
+            this.strMail = res.getString("mail");
+            this.strMailToken = res.getString("mail_token");
+            this.dtMailDate = res.getObject("mail_date", LocalDateTime.class);
+            this.dtDateCreation = res.getObject("date_creation", LocalDateTime.class);
+            this.iIdStatut = res.getInt("id_statut");
+            this.strCodeRole = res.getString("code_role");
+            this.strComment = res.getString("comment");
         }
     }
 
-    public M_Utilisateur(Db_mariadb db, String login, String mdp, String mail, String mailToken, LocalDateTime mailDate, int idStatut, String codeRole, String comment) throws SQLException {
+    public M_Utilisateur(Db_mariadb db, String strLogin, String strMdp, String strMail,
+            String strMailToken, LocalDateTime dtMailDate, int iIdStatut,
+            String strCodeRole, String strComment) throws SQLException {
         this.db = db;
-        this.login = login;
-        this.mdp = BCrypt.withDefaults().hashToString(12, mdp.toCharArray());
-        this.mail = mail;
-        this.mailToken = mailToken;
-        this.mailDate = mailDate;
-        this.dateCreation = LocalDateTime.now();
-        this.idStatut = idStatut;
-        this.codeRole = codeRole;
-        this.comment = comment;
+        this.strLogin = strLogin;
+        this.strMdp = BCrypt.withDefaults().hashToString(12, strMdp.toCharArray());
+        this.strMail = strMail;
+        this.strMailToken = strMailToken;
+        this.dtMailDate = dtMailDate;
+        this.dtDateCreation = LocalDateTime.now();
+        this.iIdStatut = iIdStatut;
+        this.strCodeRole = strCodeRole;
+        this.strComment = strComment;
 
-        String sql = "INSERT INTO UTILISATEURS (login, mdp, mail, mail_token, mail_date, date_creation, id_statut, code_role, comment) VALUES ('"
-        + login + "', '" + this.mdp + "', '" + mail + "', '" + mailToken + "', '"
-        + mailDate + "', '" + dateCreation + "', " + idStatut + ", '" + codeRole + "', '" + comment + "')";
+        String strSql = "INSERT INTO UTILISATEURS (login, mdp, mail," + ""
+                + "mail_token, mail_date, date_creation, id_statut," +
+                "code_role, comment) VALUES ('"
+        + strLogin + "', '" + this.strMdp + "', '" + strMail + "', '" + strMailToken + "', '"
+        + dtMailDate + "', '" + dtDateCreation + "', " + iIdStatut + ", '" +
+                strCodeRole + "', '" + strComment + "')";
 
-        db.sqlExec(sql);
+        db.sqlExec(strSql);
 
         ResultSet res = db.sqlLastId();
+        
         if (res.first()) {
-            this.idUtilisateur = res.getInt("id");
+            this.iIdUtilisateur = res.getInt("id");
         }
     }
 
-    public int getId() {
-        return idUtilisateur;
+    public int getIdUtilisateur() {
+        return iIdUtilisateur;
     }
 
     public String getLogin() {
-        return login;
+        return strLogin;
     }
 
     public String getMdp() {
-        return mdp;
+        return strMdp;
     }
 
     public String getMail() {
-        return mail;
+        return strMail;
     }
 
     public String getMailToken() {
-        return mailToken;
+        return strMailToken;
     }
 
     public LocalDateTime getMailDate() {
-        return mailDate;
+        return dtMailDate;
     }
 
     public LocalDateTime getDateCreation() {
-        return dateCreation;
+        return dtDateCreation;
     }
 
     public int getIdStatut() {
-        return idStatut;
+        return iIdStatut;
     }
 
     public String getCodeRole() {
-        return codeRole;
+        return strCodeRole;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setLogin(String strLogin) {
+        this.strLogin = strLogin;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setMail(String strMail) {
+        this.strMail = strMail;
     }
 
-    public void setMailToken(String mailToken) {
-        this.mailToken = mailToken;
+    public void setMailToken(String strMailToken) {
+        this.strMailToken = strMailToken;
     }
 
-    public void setMailDate(LocalDateTime mailDate) {
-        this.mailDate = mailDate;
+    public void setMailDate(LocalDateTime dtMailDate) {
+        this.dtMailDate = dtMailDate;
     }
 
-    public void setIdStatut(int idStatut) {
-        this.idStatut = idStatut;
+    public void setIdStatut(int iIdStatut) {
+        this.iIdStatut = iIdStatut;
     }
 
-    public void setCodeRole(String codeRole) {
-        this.codeRole = codeRole;
+    public void setCodeRole(String strCodeRole) {
+        this.strCodeRole = strCodeRole;
     }
 
-    public void setMdp(String nouveauMp) {
-        this.mdp = BCrypt.withDefaults().hashToString(12, nouveauMp.toCharArray());
+    public void setMdp(String strNouveauMdp) {
+        this.strMdp = BCrypt.withDefaults().hashToString(12, strNouveauMdp.toCharArray());
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE UTILISATEURS SET login='" + login + "', mdp='" + mdp + "', mail='" + mail +
-        "', mail_token='" + mailToken + "', mail_date='" + mailDate + "', date_creation='" + dateCreation + "', " +
-        "id_statut=" + idStatut + ", code_role='" + codeRole + "', comment='" + comment + "' WHERE id_utilisateur=" + idUtilisateur;
+        String strSql = "UPDATE UTILISATEURS SET login='" + strLogin + "', mdp='" +
+                strMdp + "', mail='" + strMail + "', mail_token='" + strMailToken +
+                "', mail_date='" + dtMailDate + "', date_creation='" + dtDateCreation +
+                "', " + "id_statut=" + iIdStatut + ", code_role='" + strCodeRole +
+                "', comment='" + strComment + "' WHERE id_utilisateur=" + iIdUtilisateur;
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM UTILISATEURS WHERE id_utilisateur = " + idUtilisateur);
+        String strSql = "DELETE FROM UTILISATEURS WHERE id_utilisateur =" + iIdUtilisateur;
+        
+        db.sqlExec(strSql);
     }
 
-    public static M_Utilisateur connexion_log(Db_mariadb db, String login, String mdp) throws SQLException {
-        String sql = "SELECT * FROM UTILISATEURS WHERE login= '" + login + "'";
-        ResultSet res = db.sqlSelect(sql);
+    public static M_Utilisateur connexion_log(Db_mariadb db, String strLogin, String strMdp)
+            throws SQLException {
+        M_Utilisateur unUtilisateur = null;
+        String strSql = "SELECT * FROM UTILISATEURS WHERE login= '" + strLogin + "'";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
             String hash = res.getString("mdp");
-            if (BCrypt.verifyer().verify(mdp.toCharArray(), hash).verified) {
-                return new M_Utilisateur(db, res.getInt("id_utilisateur"));
+            if (BCrypt.verifyer().verify(strMdp.toCharArray(), hash).verified) {
+                unUtilisateur = new M_Utilisateur(db, res.getInt("id_utilisateur"));
             }
         }
-        return null;
+        
+        return unUtilisateur;
     }
 
-    public static LinkedHashMap<Integer, M_Utilisateur> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<Integer, M_Utilisateur> utilisateurs = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM UTILISATEURS ORDER BY login");
+    public static LinkedHashMap<Integer, M_Utilisateur> getRecords(Db_mariadb db)
+            throws SQLException {
+        LinkedHashMap<Integer, M_Utilisateur> lhmLesUtilisateurs = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM UTILISATEURS ORDER BY login";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            M_Utilisateur u = new M_Utilisateur(db, res.getInt("id_utilisateur"));
-            utilisateurs.put(u.getId(), u);
+            M_Utilisateur unUtilisateur = new M_Utilisateur(db, res.getInt("id_utilisateur"));
+            lhmLesUtilisateurs.put(unUtilisateur.getIdUtilisateur(), unUtilisateur);
         }
-        return utilisateurs;
+        return lhmLesUtilisateurs;
     }
 
     @Override
     public String toString() {
         return "M_Utilisateur{" +
-                "id_utilisateur=" + idUtilisateur +
-                ", login='" + login + '\'' +
-                ", mail='" + mail + '\'' +
-                ", mailToken='" + mailToken + '\'' +
-                ", mailDate=" + mailDate +
-                ", dateCreation=" + dateCreation +
-                ", idStatut=" + idStatut +
-                ", codeRole='" + codeRole + '\'' +
+                "id_utilisateur=" + iIdUtilisateur +
+                ", login='" + strLogin + '\'' +
+                ", mail='" + strMail + '\'' +
+                ", mailToken='" + strMailToken + '\'' +
+                ", mailDate=" + dtMailDate +
+                ", dateCreation=" + dtDateCreation +
+                ", idStatut=" + iIdStatut +
+                ", codeRole='" + strCodeRole + '\'' +
                 '}';
     }
 }

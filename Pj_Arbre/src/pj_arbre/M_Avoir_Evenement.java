@@ -2,66 +2,76 @@ package pj_arbre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 public class M_Avoir_Evenement {
     private Db_mariadb db;
-    private int idIndividu;
-    private int idEvenement;
-
-    public M_Avoir_Evenement(Db_mariadb db, int idMembre, int idEvenement) {
-        this.db = db;
-        this.idIndividu = idMembre;
-        this.idEvenement = idEvenement;
+    private int iIdIndividu;
+    private int iIdEvenement;
+    
+    public M_Avoir_Evenement(int iIdIndividu, int iIdEvenement){
+        this.iIdIndividu = iIdIndividu;
+        this.iIdEvenement = iIdEvenement;
     }
 
-    public M_Avoir_Evenement(Db_mariadb db, int idMembre, int idEvenement, boolean insert) throws SQLException {
-        this(db, idMembre, idEvenement);
-        if (insert) {
-            String sql = "INSERT INTO AVOIR_EVENEMENT (id_individu, id_evenement) VALUES (" + idMembre + ", " + idEvenement + ")";
-            db.sqlExec(sql);
-        }
+    public M_Avoir_Evenement(Db_mariadb db, int iIdIndividu, int iIdEvenement) 
+            throws SQLException {
+            String strSql = "INSERT INTO AVOIR_EVENEMENT (id_individu, id_evenement) VALUES (" 
+                    + iIdIndividu + ", " + iIdEvenement + ")";
+            
+            db.sqlExec(strSql);
     }
 
-    public int getIdMembre() {
-        return idIndividu;
+    public int getIdIndividu() {
+        return iIdIndividu;
     }
 
     public int getIdEvenement() {
-        return idEvenement;
+        return iIdEvenement;
     }
 
     public void delete() throws SQLException {
-        String sql = "DELETE FROM AVOIR_EVENEMENT WHERE id_individu = " + idIndividu + " AND id_evenement = " + idEvenement;
-        db.sqlExec(sql);
+        String strSql = "DELETE FROM AVOIR_EVENEMENT WHERE id_individu = " + 
+                iIdIndividu + " AND id_evenement = " + iIdEvenement;
+        
+        db.sqlExec(strSql);
     }
+    
+    public static LinkedHashMap<Integer, ArrayList<M_Avoir_Evenement>> 
+        getEvenementsPourArbre(Db_mariadb db, int iIdArbre) throws SQLException {
+        LinkedHashMap<Integer, ArrayList<M_Avoir_Evenement>> lhmLesEvenementsArbre 
+                = new LinkedHashMap<>();
 
-    public static List<Integer> getEvenementsPourMembre(Db_mariadb db, int idMembre) throws SQLException {
-        List<Integer> evenements = new LinkedList<>();
-        String sql = "SELECT id_evenement FROM AVOIR_EVENEMENT WHERE id_individu = " + idMembre;
-        ResultSet res = db.sqlSelect(sql);
-        while (res.next()) {
-            evenements.add(res.getInt("id_evenement"));
-        }
-        return evenements;
-    }
+        String strSql = "SELECT ae.id_individu, ae.id_evenement " +
+                     "FROM AVOIR_EVENEMENT ae " +
+                     "JOIN INDIVIDUS i ON ae.id_individu = i.id_individu " +
+                     "WHERE i.id_arbre = " + iIdArbre;
 
-    public static List<Integer> getMembresPourEvenement(Db_mariadb db, int idEvenement) throws SQLException {
-        List<Integer> membres = new LinkedList<>();
-        String sql = "SELECT id_individu FROM AVOIR_EVENEMENT WHERE id_evenement = " + idEvenement;
-        ResultSet res = db.sqlSelect(sql);
+        ResultSet res = db.sqlSelect(strSql);
+
         while (res.next()) {
-            membres.add(res.getInt("id_individu"));
+            int iIdIndividu = res.getInt("id_individu");
+            int iIdEvenement = res.getInt("id_evenement");
+            M_Avoir_Evenement unEvenementArbre = new M_Avoir_Evenement(iIdIndividu, iIdEvenement);
+
+            ArrayList<M_Avoir_Evenement> arrLesEvenementsArbre = lhmLesEvenementsArbre.get(iIdIndividu);
+            
+            if (arrLesEvenementsArbre == null) {
+                arrLesEvenementsArbre = new ArrayList<>();
+                lhmLesEvenementsArbre.put(iIdIndividu, arrLesEvenementsArbre);
+            }
+            
+            arrLesEvenementsArbre.add(unEvenementArbre);
         }
-        return membres;
+        return lhmLesEvenementsArbre;
     }
 
     @Override
     public String toString() {
         return "M_Avoir_Evenement{" +
-                "idMembre=" + idIndividu +
-                ", idEvenement=" + idEvenement +
+                "idIndividu=" + iIdIndividu +
+                ", idEvenement=" + iIdEvenement +
                 '}';
     }
 }

@@ -23,7 +23,6 @@ public class V_Inscription extends javax.swing.JFrame {
     public V_Inscription(java.awt.Frame parent, boolean modal, C_Arbre leControl) {
         this.leControl = leControl;
         initComponents();
-        lb_erreur.setVisible(false); // cacher le message d'erreur au démarrage
     }
     
         public void afficher(){
@@ -49,10 +48,10 @@ public class V_Inscription extends javax.swing.JFrame {
         bt_enregistrer = new javax.swing.JButton();
         lb_nouv_mp = new javax.swing.JLabel();
         lb_conf_mp = new javax.swing.JLabel();
-        lb_erreur = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inscription");
+        setResizable(false);
 
         lb_login.setText("Login :");
 
@@ -75,9 +74,6 @@ public class V_Inscription extends javax.swing.JFrame {
 
         lb_conf_mp.setText("Confirmer Mdp :");
 
-        lb_erreur.setForeground(new java.awt.Color(255, 0, 0));
-        lb_erreur.setText("Les champs ne sont pas remplis.");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,59 +81,52 @@ public class V_Inscription extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lb_mail)
-                                .addGap(218, 218, 218)
-                                .addComponent(ed_mail, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lb_conf_mp)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(pw_mp_nouv, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lb_nouv_mp)
-                                    .addComponent(lb_login))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(pw_mp_conf, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ed_login, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
+                        .addGap(192, 192, 192)
                         .addComponent(bt_enregistrer))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(181, 181, 181)
-                        .addComponent(lb_erreur)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                        .addGap(24, 24, 24)
+                        .addComponent(lb_login, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ed_login, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(lb_mail, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ed_mail, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(lb_nouv_mp, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pw_mp_conf, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(lb_conf_mp, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pw_mp_nouv, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(lb_erreur)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(ed_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lb_login)
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ed_mail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_mail))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lb_login)
+                    .addComponent(ed_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lb_mail)
+                    .addComponent(ed_mail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pw_mp_conf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_nouv_mp))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pw_mp_nouv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_conf_mp))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lb_conf_mp)
+                    .addComponent(pw_mp_nouv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(bt_enregistrer)
-                .addGap(9, 9, 9))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -153,27 +142,26 @@ public class V_Inscription extends javax.swing.JFrame {
         String mdp = new String(pw_mp_nouv.getPassword());
         String mdpConf = new String(pw_mp_conf.getPassword());
 
-        lb_erreur.setVisible(false);
-
         if (login.isEmpty() || mail.isEmpty() || mdp.isEmpty() || mdpConf.isEmpty()) {
-            lb_erreur.setText("Tous les champs sont obligatoires.");
-            lb_erreur.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (!mdp.equals(mdpConf)) {
-            lb_erreur.setText("Les mots de passe ne correspondent pas.");
-            lb_erreur.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Les mots de passe ne correspondent pas.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
             leControl.insertUtilisateur(login, mail, mdp);
-            JOptionPane.showMessageDialog(this, "Votre inscription a bien été réussie.", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); // Ferme la fenêtre
+            JOptionPane.showMessageDialog(this, "Votre inscription a bien été réussie.",
+                    "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
         } catch (SQLException ex) {
-            lb_erreur.setText("Erreur lors de l'inscription.");
-            lb_erreur.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Erreur lors de l'inscription.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(V_Inscription.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bt_enregistrerActionPerformed
@@ -203,7 +191,6 @@ public class V_Inscription extends javax.swing.JFrame {
     private javax.swing.JTextField ed_login;
     private javax.swing.JTextField ed_mail;
     private javax.swing.JLabel lb_conf_mp;
-    private javax.swing.JLabel lb_erreur;
     private javax.swing.JLabel lb_login;
     private javax.swing.JLabel lb_mail;
     private javax.swing.JLabel lb_nouv_mp;

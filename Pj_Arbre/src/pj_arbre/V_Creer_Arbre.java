@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class V_Creer_Arbre extends javax.swing.JDialog {
 
     private C_Arbre leControl;
-    private M_Utilisateur utilConnecte;
+    private M_Utilisateur unUtilisateurConnecte;
     /**
      * Creates new form V_Creer_Arbre
      */
@@ -26,11 +26,8 @@ public class V_Creer_Arbre extends javax.swing.JDialog {
         initComponents();
     }
 
-    public void afficher(M_Utilisateur utilConnecte){
-        this.utilConnecte = utilConnecte;
-        
-        lb_erreur.setVisible(false);
-        
+    public void afficher(M_Utilisateur unUtilisateurConnecte){
+        this.unUtilisateurConnecte = unUtilisateurConnecte;
         
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -45,16 +42,13 @@ public class V_Creer_Arbre extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lb_erreur = new javax.swing.JLabel();
         lb_nom = new javax.swing.JLabel();
         ed_nom = new javax.swing.JTextField();
         bt_enregistrer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Créer un nouvel arbre");
-
-        lb_erreur.setForeground(new java.awt.Color(255, 0, 0));
-        lb_erreur.setText("Les champs ne sont pas remplis.");
+        setResizable(false);
 
         lb_nom.setText("Nom de l'arbre :");
 
@@ -69,57 +63,50 @@ public class V_Creer_Arbre extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(ed_nom, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
             .addGroup(layout.createSequentialGroup()
+                .addGap(120, 120, 120)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(ed_nom, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addComponent(bt_enregistrer))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addComponent(lb_erreur))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(lb_nom)))
-                .addContainerGap(59, Short.MAX_VALUE))
+                    .addComponent(lb_nom)
+                    .addComponent(bt_enregistrer))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
-                .addComponent(lb_erreur)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
                 .addComponent(lb_nom)
                 .addGap(18, 18, 18)
                 .addComponent(ed_nom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(bt_enregistrer)
-                .addGap(36, 36, 36))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_enregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enregistrerActionPerformed
-        String nomArbre = ed_nom.getText().trim();
+        String strNomArbre = ed_nom.getText().trim();
 
-        lb_erreur.setVisible(false);
-
-        if (nomArbre.isEmpty()) {
-            lb_erreur.setText("Veuillez choisir un nom pour l'arbre.");
-            lb_erreur.setVisible(true);
+        if (strNomArbre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez choisir un nom pour "
+                    + "l'arbre.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            leControl.insertArbre(nomArbre, utilConnecte.getId()); // Méthode hypothétique à adapter selon ton contrôleur
-            JOptionPane.showMessageDialog(this, "L'arbre a bien été créé.", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); // Ferme la fenêtre
+            leControl.insertArbre(strNomArbre, unUtilisateurConnecte.getIdUtilisateur());
+            JOptionPane.showMessageDialog(this, "L'arbre a bien été créé.",
+                    "Succès", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+            leControl.aff_V_MesArbres();
         } catch (SQLException ex) {
-            lb_erreur.setText("Erreur lors de la création de l'arbre.");
-            lb_erreur.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Erreur lors de la création de "
+                    + "l'arbre.", "Erreur", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(V_Creer_Arbre.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bt_enregistrerActionPerformed
@@ -170,7 +157,6 @@ public class V_Creer_Arbre extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_enregistrer;
     private javax.swing.JTextField ed_nom;
-    private javax.swing.JLabel lb_erreur;
     private javax.swing.JLabel lb_nom;
     // End of variables declaration//GEN-END:variables
 }

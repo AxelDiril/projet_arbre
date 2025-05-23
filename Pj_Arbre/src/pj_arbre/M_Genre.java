@@ -6,64 +6,79 @@ import java.util.LinkedHashMap;
 
 public class M_Genre {
     private Db_mariadb db;
-    private String codeGenre;
-    private String libelle;
+    private String strCodeGenre;
+    private String strLibelle;
 
-    public M_Genre(Db_mariadb db, String codeGenre) throws SQLException {
+    public M_Genre(Db_mariadb db, String strCodeGenre) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM GENRES WHERE code_genre = '" + codeGenre + "'";
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM GENRES WHERE code_genre = '" + strCodeGenre + "'";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
-            this.codeGenre = res.getString("code_genre");
-            this.libelle = res.getString("libelle");
+            this.strCodeGenre = res.getString("code_genre");
+            this.strLibelle = res.getString("libelle");
         }
     }
 
-    public M_Genre(Db_mariadb db, String codeGenre, String libelle) throws SQLException {
+    public M_Genre(Db_mariadb db, String strCodeGenre, String strLibelle) throws SQLException {
         this.db = db;
-        this.codeGenre = codeGenre;
-        this.libelle = libelle;
+        this.strCodeGenre = strCodeGenre;
+        this.strLibelle = strLibelle;
 
-        String sql = "INSERT INTO GENRES (code_genre, libelle) VALUES ('" + codeGenre + "', '" + libelle + "')";
-        db.sqlExec(sql);
+        String strSql = "INSERT INTO GENRES (code_genre, libelle) VALUES ('" + 
+                strCodeGenre + "', '" + strLibelle + "')";
+        
+        db.sqlExec(strSql);
     }
 
     public String getCodeGenre() {
-        return codeGenre;
+        return strCodeGenre;
     }
 
     public String getLibelle() {
-        return libelle;
+        return strLibelle;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setLibelle(String strLibelle) {
+        this.strLibelle = strLibelle;
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE GENRES SET libelle = '" + libelle + "' WHERE code_genre = '" + codeGenre + "'";
-        db.sqlExec(sql);
+        String strSql = "UPDATE GENRES SET libelle = '" + strLibelle + 
+                "' WHERE code_genre = '" + strCodeGenre + "'";
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM GENRES WHERE code_genre = '" + codeGenre + "'");
+        String strSql = "DELETE FROM GENRES WHERE code_genre = '" +
+                strCodeGenre + "'" ;
+        
+        db.sqlExec(strSql);
     }
 
     public static LinkedHashMap<String, M_Genre> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<String, M_Genre> genres = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM GENRES ORDER BY libelle");
+        LinkedHashMap<String, M_Genre> lhmLesGenres = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM GENRES ORDER BY libelle";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            M_Genre g = new M_Genre(db, res.getString("code_genre"));
-            genres.put(g.getCodeGenre(), g);
+            M_Genre unGenre = new M_Genre(db, res.getString("code_genre"));
+            lhmLesGenres.put(unGenre.getCodeGenre(), unGenre);
         }
-        return genres;
+        
+        return lhmLesGenres;
     }
 
     @Override
     public String toString() {
         return "M_Genre{" +
-                "codeGenre='" + codeGenre + '\'' +
-                ", libelle='" + libelle + '\'' +
+                "codeGenre='" + strCodeGenre + '\'' +
+                ", libelle='" + strLibelle + '\'' +
                 '}';
     }
 }

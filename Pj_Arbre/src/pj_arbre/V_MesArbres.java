@@ -5,8 +5,6 @@
 package pj_arbre;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,14 +21,14 @@ public class V_MesArbres extends javax.swing.JDialog {
      * Creates new form V_MesArbres
      */
     private C_Arbre leControl;
-    private LinkedHashMap <Integer, M_Acceder> lesAccesUtilisateur;
-    private LinkedHashMap<String, M_Acces_Arbre> lesAcces;
-    private LinkedHashMap <Integer, M_Arbre> lesArbres;
+    private LinkedHashMap <Integer, M_Acceder> lhmLesAccesUtilisateur;
+    private LinkedHashMap<String, M_Acces_Arbre> lhmLesAcces;
+    private LinkedHashMap <Integer, M_Arbre> lhmLesArbres;
     
     private DefaultTableModel dtm_tb_arbres;
-    private Object[] tableauCles;
-    private int ligne;
-    private int cle;
+    private Object[] objTableauCles;
+    private int iLigne;
+    private int iCle;
     
     public V_MesArbres(java.awt.Frame parent, boolean modal, C_Arbre leControl) {           
         super(parent, modal);
@@ -38,28 +36,30 @@ public class V_MesArbres extends javax.swing.JDialog {
         initComponents();
     }
     
-    public void afficher(LinkedHashMap<Integer, M_Acceder> lesAccesUtilisateur, LinkedHashMap<String, M_Acces_Arbre> lesAcces, LinkedHashMap<Integer, M_Arbre> lesArbres) {
-        this.lesAccesUtilisateur = lesAccesUtilisateur;
-        this.lesAcces = lesAcces;
-        this.lesArbres = lesArbres;
+    public void afficher(LinkedHashMap<Integer, M_Acceder> lhmLesAccesUtilisateur,
+            LinkedHashMap<String, M_Acces_Arbre> lhmLesAcces,
+            LinkedHashMap<Integer, M_Arbre> lhmLesArbres) {
+        this.lhmLesAccesUtilisateur = lhmLesAccesUtilisateur;
+        this.lhmLesAcces = lhmLesAcces;
+        this.lhmLesArbres = lhmLesArbres;
 
         dtm_tb_arbres = (DefaultTableModel) tb_arbres.getModel();
-        dtm_tb_arbres.setRowCount(0); // Vider le tableau avant de remplir
+        dtm_tb_arbres.setRowCount(0);
 
-        for (M_Acceder unAcces : this.lesAccesUtilisateur.values()) {
-            int idArbre = unAcces.getIdArbre();
-            String codeAcces = unAcces.getCodeAcces();
-            M_Arbre arbre = lesArbres.get(idArbre);
-            M_Acces_Arbre accesArbre = lesAcces.get(codeAcces);
+        for (M_Acceder unAcces : this.lhmLesAccesUtilisateur.values()) {
+            int iIdArbre = unAcces.getIdArbre();
+            String strCodeAcces = unAcces.getCodeAcces();
+            M_Arbre unArbre = lhmLesArbres.get(iIdArbre);
+            M_Acces_Arbre unAccesArbre = lhmLesAcces.get(strCodeAcces);
 
-            if (arbre != null) {
-                dtm_tb_arbres.addRow(new Object[]{arbre.getNom(), accesArbre.getLibelle()});
+            if (unArbre != null) {
+                dtm_tb_arbres.addRow(new Object[]{unArbre.getNom(), unAccesArbre.getLibelle()});
+            }
         }
+        this.setSize(500, 340);
+        this.setLocationRelativeTo(null); // déplacer ici
+        this.setVisible(true);
 
-            this.setLocationRelativeTo(null);
-            this.setSize(500, 650);
-            this.setVisible(true);
-        }
     }
 
     /**
@@ -115,7 +115,7 @@ public class V_MesArbres extends javax.swing.JDialog {
         }
 
         getContentPane().add(sc_util);
-        sc_util.setBounds(70, 130, 302, 256);
+        sc_util.setBounds(20, 20, 302, 256);
 
         bt_creer.setText("Créer");
         bt_creer.addActionListener(new java.awt.event.ActionListener() {
@@ -144,35 +144,63 @@ public class V_MesArbres extends javax.swing.JDialog {
             pn_cmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pn_cmsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bt_creer, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
-            .addGroup(pn_cmsLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(pn_cmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bt_ouvrir, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bt_supprimer))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pn_cmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bt_ouvrir, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                    .addComponent(bt_creer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bt_supprimer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
         pn_cmsLayout.setVerticalGroup(
             pn_cmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pn_cmsLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addComponent(bt_creer)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bt_ouvrir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bt_supprimer)
-                .addGap(15, 15, 15))
+                .addContainerGap())
         );
 
         getContentPane().add(pn_cms);
-        pn_cms.setBounds(380, 200, 160, 170);
+        pn_cms.setBounds(330, 80, 150, 130);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_supprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_supprimerActionPerformed
+        if (iLigne != -1) {
+            M_Acceder unAcces = lhmLesAccesUtilisateur.get(iCle);
+            
+            if (unAcces != null) {
+                M_Acces_Arbre accesArbre = lhmLesAcces.get(unAcces.getCodeAcces());
+                
+                if (accesArbre != null && "C".equals(accesArbre.getCodeAcces())) {
+                    int reponse = JOptionPane.showConfirmDialog(this,
+                        "Êtes-vous sûr de vouloir supprimer cet arbre ?", "Suppression",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
+                    if (reponse == JOptionPane.YES_OPTION) {
+                        try {
+                            leControl.delete_Arbre(iCle);
+                            JOptionPane.showMessageDialog(null, "L'arbre a bien été supprimé.",
+                                    "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(V_MesArbres.class.getName()).log(Level.SEVERE, null, ex);
+                            JOptionPane.showMessageDialog(null, "Erreur lors de la suppression.",
+                                    "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Vous n'êtes pas"
+                            + " le créateur de l'arbre.",
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner un arbre.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_bt_supprimerActionPerformed
 
     private void bt_creerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_creerActionPerformed
@@ -180,30 +208,32 @@ public class V_MesArbres extends javax.swing.JDialog {
     }//GEN-LAST:event_bt_creerActionPerformed
 
     private void tb_arbresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_arbresMouseClicked
-        ligne = tb_arbres.getSelectedRow();
-        if (ligne != -1) {
-            Object[] cles = lesAccesUtilisateur.keySet().toArray();
-            cle = (int) cles[ligne];
+        iLigne = tb_arbres.getSelectedRow();
+        if (iLigne != -1) {
+            Object[] cles = lhmLesAccesUtilisateur.keySet().toArray();
+            iCle = (int) cles[iLigne];
         }
     }//GEN-LAST:event_tb_arbresMouseClicked
 
     private void bt_ouvrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ouvrirActionPerformed
-        if (ligne == -1) {
-            JOptionPane.showMessageDialog(this, "Veuillez sélectionner un arbre.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        if (iLigne == -1) {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner un arbre.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        M_Acceder acces = lesAccesUtilisateur.get(cle);
-        if (acces == null) {
+        M_Acceder unAcces = lhmLesAccesUtilisateur.get(iCle);
+        if (unAcces == null) {
             JOptionPane.showMessageDialog(this, "Accès non trouvé.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        M_Arbre arbre = lesArbres.get(acces.getIdArbre());
+        M_Arbre arbre = lhmLesArbres.get(unAcces.getIdArbre());
+        String strCodeAcces = unAcces.getCodeAcces();
         if (arbre != null) {
             this.dispose();
             try {
-                leControl.aff_V_Arbre(arbre);
+                leControl.aff_V_Arbre(arbre, strCodeAcces);
             } catch (SQLException ex) {
                 Logger.getLogger(V_MesArbres.class.getName()).log(Level.SEVERE, null, ex);
             }

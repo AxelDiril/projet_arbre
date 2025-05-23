@@ -6,91 +6,97 @@ import java.util.LinkedHashMap;
 
 public class M_Arbre {
     private Db_mariadb db;
-    private int idArbre;
-    private String nom;
-    private int idCreateur;
+    private int iIdArbre;
+    private String strNom;
+    private int iIdUtilisateur;
 
-    public M_Arbre(Db_mariadb db, int idArbre) throws SQLException {
+    public M_Arbre(Db_mariadb db, int iIdArbre) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM ARBRES WHERE id_arbre = " + idArbre;
+        
+        String sql = "SELECT * FROM ARBRES WHERE id_arbre = " + iIdArbre;
+        
         ResultSet res = db.sqlSelect(sql);
+        
         if (res.first()) {
-            this.idArbre = idArbre;
-            this.nom = res.getString("nom");
-            this.idCreateur = res.getInt("id_createur");
+            this.iIdArbre = iIdArbre;
+            this.strNom = res.getString("nom");
+            this.iIdUtilisateur = res.getInt("id_createur");
         }
     }
 
-    // Constructeur d’insertion
-    public M_Arbre(Db_mariadb db, String nom, int idCreateur) throws SQLException {
+    public M_Arbre(Db_mariadb db, String strNom, int iIdUtilisateur) throws SQLException {
         this.db = db;
-        this.nom = nom;
-        this.idCreateur = idCreateur;
+        this.strNom = strNom;
+        this.iIdUtilisateur = iIdUtilisateur;
 
-        String sql = "INSERT INTO ARBRES (nom, id_createur) VALUES ('" + nom + "', " + idCreateur + ")";
-        db.sqlExec(sql);
+        String strSql = "INSERT INTO ARBRES (nom, id_createur) VALUES ('" 
+                + strNom + "', " + iIdUtilisateur + ")";
+        db.sqlExec(strSql);
         
         ResultSet res = db.sqlLastId();
+        
         if (res.first()) {
-            this.idArbre = res.getInt("id");
+            this.iIdArbre = res.getInt("id");
         }
     }
 
-    // Getters
     public int getIdArbre() {
-        return idArbre;
+        return iIdArbre;
     }
 
     public String getNom() {
-        return nom;
+        return strNom;
     }
 
     public int getIdCreateur() {
-        return idCreateur;
+        return iIdUtilisateur;
     }
 
-    // Setters (sauf pour la clé primaire)
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setNom(String strNom) {
+        this.strNom = strNom;
     }
 
-    public void setIdCreateur(int idCreateur) {
-        this.idCreateur = idCreateur;
+    public void setIdCreateur(int iIdUtilisateur) {
+        this.iIdUtilisateur = iIdUtilisateur;
     }
 
-    // Mise à jour
     public void update() throws SQLException {
-        String sql = "UPDATE ARBRES SET nom = '" + nom + "', id_createur = " + idCreateur +
-                     " WHERE id_arbre = " + idArbre;
-        db.sqlExec(sql);
+        String strSql = "UPDATE ARBRES SET nom = '" + strNom 
+                + "', id_createur = "  + iIdUtilisateur +
+                     " WHERE id_arbre = " + iIdArbre;
+        db.sqlExec(strSql);
     }
 
     // Suppression
     public void delete() throws SQLException {
-        String sql = "DELETE FROM ARBRES WHERE id_arbre = " + idArbre;
-        db.sqlExec(sql);
+        String strSql = "DELETE FROM ARBRES WHERE id_arbre = " + iIdArbre;
+        
+        db.sqlExec(strSql);
     }
     
-    public static LinkedHashMap<Integer, M_Arbre> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<Integer, M_Arbre> arbres = new LinkedHashMap<>();
-        String sql = "SELECT * FROM ARBRES ORDER BY nom";
-        ResultSet res = db.sqlSelect(sql);
+    public static LinkedHashMap<Integer, M_Arbre> getRecords(Db_mariadb db) 
+            throws SQLException {
+        LinkedHashMap<Integer, M_Arbre> lhmLesArbres = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM ARBRES ORDER BY nom";
+        
+        ResultSet res = db.sqlSelect(strSql);
 
         while (res.next()) {
-            int idArbre = res.getInt("id_arbre");
-            M_Arbre arbre = new M_Arbre(db, idArbre);  // utilise ton constructeur de récupération
-            arbres.put(idArbre, arbre);
+            int iIdArbre = res.getInt("id_arbre");
+            M_Arbre unArbre = new M_Arbre(db, iIdArbre);
+            lhmLesArbres.put(iIdArbre, unArbre);
         }
 
-        return arbres;
+        return lhmLesArbres;
     }
 
     @Override
     public String toString() {
         return "M_Arbre{" +
-                "idArbre=" + idArbre +
-                ", nom='" + nom + '\'' +
-                ", idCreateur=" + idCreateur +
+                "idArbre=" + iIdArbre +
+                ", nom='" + strNom + '\'' +
+                ", idCreateur=" + iIdUtilisateur +
                 '}';
     }
 }

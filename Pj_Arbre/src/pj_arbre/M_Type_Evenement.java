@@ -6,75 +6,81 @@ import java.util.LinkedHashMap;
 
 public class M_Type_Evenement {
     private Db_mariadb db;
-    private int idTypeEvenement;
-    private String libelle;
+    private int iIdTypeEvenement;
+    private String strLibelle;
 
-    // Constructeur de récupération depuis la BDD
-    public M_Type_Evenement(Db_mariadb db, int idTypeEvenement) throws SQLException {
+    public M_Type_Evenement(Db_mariadb db, int iIdTypeEvenement) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM TYPE_EVENEMENT WHERE id_type_evenement = " + idTypeEvenement;
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM TYPE_EVENEMENT WHERE id_type_evenement = " + iIdTypeEvenement;
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
-            this.idTypeEvenement = idTypeEvenement;
-            this.libelle = res.getString("libelle");
+            this.iIdTypeEvenement = iIdTypeEvenement;
+            this.strLibelle = res.getString("libelle");
         }
     }
 
-    // Constructeur d’insertion
-    public M_Type_Evenement(Db_mariadb db, String libelle) throws SQLException {
+    public M_Type_Evenement(Db_mariadb db, String strLibelle) throws SQLException {
         this.db = db;
-        this.libelle = libelle;
+        this.strLibelle = strLibelle;
 
-        String sql = "INSERT INTO TYPE_EVENEMENT (libelle) VALUES ('" + libelle + ")";
-        db.sqlExec(sql);
+        String strSql = "INSERT INTO TYPE_EVENEMENT (libelle) VALUES ('" + strLibelle + ")";
+        
+        db.sqlExec(strSql);
 
         ResultSet res = db.sqlLastId();
         if (res.first()) {
-            this.idTypeEvenement = res.getInt("id_type_evenement");
+            this.iIdTypeEvenement = res.getInt("id_type_evenement");
         }
     }
 
-    // Getters
     public int getIdTypeEvenement() {
-        return idTypeEvenement;
+        return iIdTypeEvenement;
     }
 
-    public String getLabel() {
-        return libelle;
+    public String getLibelle() {
+        return strLibelle;
     }
 
-    // Setter pour libelle et nbPersonnesMaxi
-    public void setLabel(String libelle) {
-        this.libelle = libelle;
+    public void setLibelle(String strLibelle) {
+        this.strLibelle = strLibelle;
     }
 
-    // Mise à jour
     public void update() throws SQLException {
-        String sql = "UPDATE TYPE_EVENEMENT SET libelle = '" + libelle + " WHERE id_type_evenement = " + idTypeEvenement;
-        db.sqlExec(sql);
+        String strSql = "UPDATE TYPE_EVENEMENT SET libelle = '" + strLibelle +
+                " WHERE id_type_evenement = " + iIdTypeEvenement;
+        
+        db.sqlExec(strSql);
     }
 
-    // Suppression
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM TYPE_EVENEMENT WHERE id_type_evenement = " + idTypeEvenement);
+        String strSql = "DELETE FROM TYPE_EVENEMENT WHERE id_type_evenement = " + iIdTypeEvenement;
+        
+        db.sqlExec(strSql);
     }
 
-    // Récupération de tous les types d'événements
     public static LinkedHashMap<Integer, M_Type_Evenement> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<Integer, M_Type_Evenement> typesEvenement = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM TYPE_EVENEMENT ORDER BY libelle");
+        LinkedHashMap<Integer, M_Type_Evenement> lhmLesTypesEvenement = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM TYPE_EVENEMENT ORDER BY libelle";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            M_Type_Evenement t = new M_Type_Evenement(db, res.getInt("id_type_evenement"));
-            typesEvenement.put(t.getIdTypeEvenement(), t);
+            M_Type_Evenement unTypeEvenement = new M_Type_Evenement(db, res.getInt("id_type_evenement"));
+            lhmLesTypesEvenement.put(unTypeEvenement.getIdTypeEvenement(), unTypeEvenement);
         }
-        return typesEvenement;
+        
+        return lhmLesTypesEvenement;
     }
 
     @Override
     public String toString() {
         return "M_TypeEvenement{" +
-                "idTypeEvenement=" + idTypeEvenement +
-                ", libelle='" + libelle +
+                "idTypeEvenement=" + iIdTypeEvenement +
+                ", libelle='" + strLibelle +
                 '}';
     }
 }

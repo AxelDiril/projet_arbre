@@ -6,68 +6,83 @@ import java.util.LinkedHashMap;
 
 public class M_Statut {
     private Db_mariadb db;
-    private int idStatut;
-    private String libelle;
+    private int iIdStatut;
+    private String strLibelle;
 
-    public M_Statut(Db_mariadb db, int idStatut) throws SQLException {
+    public M_Statut(Db_mariadb db, int iIdStatut) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM STATUT WHERE id_statut = " + idStatut;
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM STATUT WHERE id_statut = " + iIdStatut;
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
-            this.idStatut = res.getInt("id_statut");
-            this.libelle = res.getString("libelle");
+            this.iIdStatut = res.getInt("id_statut");
+            this.strLibelle = res.getString("libelle");
         }
     }
 
-    public M_Statut(Db_mariadb db, String libelle) throws SQLException {
+    public M_Statut(Db_mariadb db, String strLibelle) throws SQLException {
         this.db = db;
-        this.libelle = libelle;
+        this.strLibelle = strLibelle;
 
-        String sql = "INSERT INTO STATUT (libelle) VALUES ('" + libelle + "')";
-        db.sqlExec(sql);
+        String strSql = "INSERT INTO STATUT (libelle) VALUES ('" + strLibelle + "')";
+        
+        db.sqlExec(strSql);
 
         ResultSet res = db.sqlLastId();
+        
         if (res.first()) {
-            this.idStatut = res.getInt(1);
+            this.iIdStatut = res.getInt(1);
         }
     }
 
     public int getIdStatut() {
-        return idStatut;
+        return iIdStatut;
     }
 
-    public String getLabel() {
-        return libelle;
+    public String getLibelle() {
+        return strLibelle;
     }
 
-    public void setLabel(String libelle) {
-        this.libelle = libelle;
+    public void setLibelle(String libelle) {
+        this.strLibelle = libelle;
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE STATUT SET libelle = '" + libelle + "' WHERE id_statut = " + idStatut;
-        db.sqlExec(sql);
+        String strSql = "UPDATE STATUT SET libelle = '" + strLibelle +
+                "' WHERE id_statut = " + iIdStatut;
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM STATUT WHERE id_statut = " + idStatut);
+        String strSql = "DELETE FROM STATUT WHERE id_statut = " + iIdStatut;
+        
+        db.sqlExec(strSql);
     }
 
-    public static LinkedHashMap<Integer, M_Statut> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<Integer, M_Statut> statuts = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM STATUT ORDER BY libelle");
+    public static LinkedHashMap<Integer, M_Statut> getRecords(Db_mariadb db) 
+            throws SQLException {
+        LinkedHashMap<Integer, M_Statut> lhmLesStatuts = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM STATUT ORDER BY libelle";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            M_Statut statut = new M_Statut(db, res.getInt("id_statut"));
-            statuts.put(statut.getIdStatut(), statut);
+            M_Statut unStatut = new M_Statut(db, res.getInt("id_statut"));
+            lhmLesStatuts.put(unStatut.getIdStatut(), unStatut);
         }
-        return statuts;
+        
+        return lhmLesStatuts;
     }
 
     @Override
     public String toString() {
         return "M_Statut{" +
-                "idStatut=" + idStatut +
-                ", libelle='" + libelle + '\'' +
+                "idStatut=" + iIdStatut +
+                ", libelle='" + strLibelle + '\'' +
                 '}';
     }
 }

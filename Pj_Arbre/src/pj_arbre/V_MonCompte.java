@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class V_MonCompte extends javax.swing.JDialog {
 
     private C_Arbre leControl;
-    private M_Utilisateur unUtil;
+    private M_Utilisateur unUtilisateur;
     
     public V_MonCompte(java.awt.Frame parent, boolean modal, C_Arbre leControl) {
         super(parent, modal);
@@ -25,16 +25,14 @@ public class V_MonCompte extends javax.swing.JDialog {
         initComponents();
     }
 
-    public void afficher(M_Utilisateur unUtil){
-        this.unUtil = unUtil;
-        ed_login.setText(unUtil.getLogin());
-        ed_mail.setText(unUtil.getMail());
+    public void afficher(M_Utilisateur unUtilisateur){
+        this.unUtilisateur = unUtilisateur;
+        ed_login.setText(unUtilisateur.getLogin());
+        ed_mail.setText(unUtilisateur.getMail());
         
         ed_login.setEditable(false);
         ed_mail.setEditable(false);
         
-        lb_erreur.setVisible(false);
-        lb_erreur_mdp.setVisible(false);
         bt_modifier.setVisible(true);
         bt_modifier_mdp.setVisible(true);
         bt_enregistrer.setVisible(false);
@@ -42,7 +40,7 @@ public class V_MonCompte extends javax.swing.JDialog {
         
         pn_Utilisateur.setVisible(true);
         pn_MP.setVisible(false);
-        
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -62,6 +60,15 @@ public class V_MonCompte extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pn_MP = new javax.swing.JPanel();
+        lb_mp_actuel = new javax.swing.JLabel();
+        lb_nouv_mp = new javax.swing.JLabel();
+        lb_conf_mp = new javax.swing.JLabel();
+        pw_mp_ancien = new javax.swing.JPasswordField();
+        pw_mp_nouv = new javax.swing.JPasswordField();
+        pw_mp_conf = new javax.swing.JPasswordField();
+        bt_annuler_mdp = new javax.swing.JButton();
+        bt_enregistrer_mdp = new javax.swing.JButton();
         pn_Utilisateur = new javax.swing.JPanel();
         lb_login = new javax.swing.JLabel();
         ed_login = new javax.swing.JTextField();
@@ -71,31 +78,94 @@ public class V_MonCompte extends javax.swing.JDialog {
         bt_annuler = new javax.swing.JButton();
         lb_mail = new javax.swing.JLabel();
         ed_mail = new javax.swing.JTextField();
-        lb_erreur = new javax.swing.JLabel();
-        pn_MP = new javax.swing.JPanel();
-        lb_mp_actuel = new javax.swing.JLabel();
-        lb_nouv_mp = new javax.swing.JLabel();
-        lb_conf_mp = new javax.swing.JLabel();
-        bt_enregistrer_mdp = new javax.swing.JButton();
-        bt_annuler_mdp = new javax.swing.JButton();
-        lb_erreur_mdp = new javax.swing.JLabel();
-        pw_mp_ancien = new javax.swing.JPasswordField();
-        pw_mp_nouv = new javax.swing.JPasswordField();
-        pw_mp_conf = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Mon compte");
+        setResizable(false);
+        getContentPane().setLayout(new java.awt.CardLayout());
+
+        lb_mp_actuel.setText("Mot de passe actuel :");
+
+        lb_nouv_mp.setText("Nouveau mot de passe :");
+
+        lb_conf_mp.setText("Confirmer nouveau mot de passe :");
+
+        pw_mp_nouv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pw_mp_nouvActionPerformed(evt);
+            }
+        });
+
+        bt_annuler_mdp.setText("Annuler");
+        bt_annuler_mdp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_annuler_mdpActionPerformed(evt);
+            }
+        });
+
+        bt_enregistrer_mdp.setText("Enregistrer");
+        bt_enregistrer_mdp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_enregistrer_mdpActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pn_MPLayout = new javax.swing.GroupLayout(pn_MP);
+        pn_MP.setLayout(pn_MPLayout);
+        pn_MPLayout.setHorizontalGroup(
+            pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pn_MPLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pw_mp_conf)
+                    .addComponent(pw_mp_nouv)
+                    .addComponent(pw_mp_ancien)
+                    .addGroup(pn_MPLayout.createSequentialGroup()
+                        .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lb_nouv_mp)
+                            .addComponent(lb_conf_mp)
+                            .addComponent(lb_mp_actuel))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pn_MPLayout.createSequentialGroup()
+                        .addComponent(bt_enregistrer_mdp, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bt_annuler_mdp, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        pn_MPLayout.setVerticalGroup(
+            pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pn_MPLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(lb_mp_actuel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pw_mp_ancien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lb_nouv_mp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pw_mp_nouv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lb_conf_mp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pw_mp_conf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bt_annuler_mdp)
+                    .addComponent(bt_enregistrer_mdp))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(pn_MP, "card3");
 
         lb_login.setText("Login :");
 
         bt_modifier.setText("Modifier");
-        bt_modifier.setToolTipText("");
         bt_modifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_modifierActionPerformed(evt);
             }
         });
 
-        bt_modifier_mdp.setText("Modifier mot de passe");
+        bt_modifier_mdp.setText("Modifier Mdp");
         bt_modifier_mdp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_modifier_mdpActionPerformed(evt);
@@ -118,45 +188,37 @@ public class V_MonCompte extends javax.swing.JDialog {
 
         lb_mail.setText("Mail :");
 
-        lb_erreur.setForeground(new java.awt.Color(255, 0, 0));
-        lb_erreur.setText("Les champs ne sont pas remplis.");
-
         javax.swing.GroupLayout pn_UtilisateurLayout = new javax.swing.GroupLayout(pn_Utilisateur);
         pn_Utilisateur.setLayout(pn_UtilisateurLayout);
         pn_UtilisateurLayout.setHorizontalGroup(
             pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pn_UtilisateurLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pn_UtilisateurLayout.createSequentialGroup()
+                .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pn_UtilisateurLayout.createSequentialGroup()
-                        .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bt_modifier_mdp)
-                            .addComponent(bt_modifier))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bt_enregistrer)
-                            .addComponent(bt_annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 36, Short.MAX_VALUE))
-                    .addGroup(pn_UtilisateurLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lb_login)
                             .addComponent(lb_mail))
-                        .addGap(90, 90, 90)
+                        .addGap(21, 21, 21)
                         .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ed_login, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(ed_mail, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap())
-            .addGroup(pn_UtilisateurLayout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(lb_erreur)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(ed_login)
+                            .addComponent(ed_mail)))
+                    .addGroup(pn_UtilisateurLayout.createSequentialGroup()
+                        .addGap(0, 10, Short.MAX_VALUE)
+                        .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bt_modifier, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bt_enregistrer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bt_annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bt_modifier_mdp))
+                        .addGap(10, 10, 10)))
+                .addGap(19, 19, 19))
         );
         pn_UtilisateurLayout.setVerticalGroup(
             pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pn_UtilisateurLayout.createSequentialGroup()
-                .addGap(82, 82, 82)
-                .addComponent(lb_erreur)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(53, 53, 53)
                 .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ed_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_login))
@@ -164,115 +226,18 @@ public class V_MonCompte extends javax.swing.JDialog {
                 .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ed_mail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_mail))
-                .addGap(83, 83, 83)
-                .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bt_enregistrer)
-                    .addComponent(bt_modifier))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bt_modifier_mdp)
-                    .addComponent(bt_annuler))
-                .addGap(35, 35, 35))
+                    .addComponent(bt_modifier))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pn_UtilisateurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bt_annuler)
+                    .addComponent(bt_enregistrer))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
-        lb_mp_actuel.setText("Mot de passe actuel :");
-
-        lb_nouv_mp.setText("Nouveau mot de passe :");
-
-        lb_conf_mp.setText("Confirmer nouveau mot de passe :");
-
-        bt_enregistrer_mdp.setText("Enregistrer");
-        bt_enregistrer_mdp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_enregistrer_mdpActionPerformed(evt);
-            }
-        });
-
-        bt_annuler_mdp.setText("Annuler");
-        bt_annuler_mdp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_annuler_mdpActionPerformed(evt);
-            }
-        });
-
-        lb_erreur_mdp.setForeground(new java.awt.Color(255, 0, 0));
-        lb_erreur_mdp.setText("Erreur");
-
-        pw_mp_nouv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pw_mp_nouvActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pn_MPLayout = new javax.swing.GroupLayout(pn_MP);
-        pn_MP.setLayout(pn_MPLayout);
-        pn_MPLayout.setHorizontalGroup(
-            pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pn_MPLayout.createSequentialGroup()
-                .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(pn_MPLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lb_nouv_mp)
-                            .addComponent(lb_conf_mp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lb_erreur_mdp)
-                                .addComponent(lb_mp_actuel))
-                            .addComponent(pw_mp_nouv)))
-                    .addGroup(pn_MPLayout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addGroup(pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(bt_enregistrer_mdp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bt_annuler_mdp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(pn_MPLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(pw_mp_conf))
-                    .addGroup(pn_MPLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(pw_mp_ancien)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pn_MPLayout.setVerticalGroup(
-            pn_MPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pn_MPLayout.createSequentialGroup()
-                .addComponent(lb_erreur_mdp)
-                .addGap(42, 42, 42)
-                .addComponent(lb_mp_actuel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pw_mp_ancien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lb_nouv_mp)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pw_mp_nouv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lb_conf_mp)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pw_mp_conf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_enregistrer_mdp)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bt_annuler_mdp)
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pn_Utilisateur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pn_MP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pn_MP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(pn_Utilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        getContentPane().add(pn_Utilisateur, "card2");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -294,57 +259,66 @@ public class V_MonCompte extends javax.swing.JDialog {
     }//GEN-LAST:event_bt_modifierActionPerformed
 
     private void bt_enregistrer_mdpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enregistrer_mdpActionPerformed
-        String ancienMp = new String(pw_mp_ancien.getPassword());
-        String nouveauMp = new String(pw_mp_nouv.getPassword());
-        String confMp = new String(pw_mp_conf.getPassword());
+        String strAncienMp = new String(pw_mp_ancien.getPassword());
+        String strNouveauMp = new String(pw_mp_nouv.getPassword());
+        String strConfMp = new String(pw_mp_conf.getPassword());
 
-        if (!ancienMp.isEmpty() && !nouveauMp.isEmpty() && !confMp.isEmpty()) {
-            if (nouveauMp.equals(confMp)) {
-                int id = unUtil.getId();
-                String login = unUtil.getLogin();
+        if (!strAncienMp.isEmpty() && !strNouveauMp.isEmpty() && !strConfMp.isEmpty()) {
+            if (strNouveauMp.equals(strConfMp)) {
+                int id = unUtilisateur.getIdUtilisateur();
+                String strLogin = unUtilisateur.getLogin();
 
                 try {
-                    if (leControl.verif_Mp(id, login, ancienMp, nouveauMp)) {
+                    if (leControl.verif_Mp(id, strLogin, strAncienMp, strNouveauMp)) {
                         vider();
-                        JOptionPane.showMessageDialog(null, "Le mot de passe a bien été mis à jour.", "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
-                        afficher(unUtil);
+                        JOptionPane.showMessageDialog(null,
+                            "Le mot de passe a bien été mis à jour.", "Mise à jour",
+                            JOptionPane.INFORMATION_MESSAGE);
+                        afficher(unUtilisateur);
                     } else {
-                        lb_erreur_mdp.setVisible(true);
-                        lb_erreur_mdp.setText("L'ancien mot de passe est incorrect.");
+                        JOptionPane.showMessageDialog(this,
+                                "L'ancien mot de passe est incorrect.",
+                                "Erreur",JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(V_MonCompte.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                lb_erreur_mdp.setVisible(true);
-                lb_erreur_mdp.setText("Les mots de passe ne correspondent pas.");
+                JOptionPane.showMessageDialog(this,
+                        "Les mots de passe ne correspondent pas.",
+                        "Erreur",JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            lb_erreur_mdp.setVisible(true);
-            lb_erreur_mdp.setText("Tous les champs ne sont pas complétés.");
+            JOptionPane.showMessageDialog(this,
+                    "Tous les champs ne sont pas complétés.",
+                    "Erreur",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bt_enregistrer_mdpActionPerformed
 
     private void bt_annuler_mdpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_annuler_mdpActionPerformed
         vider();
-        afficher(unUtil);
+        afficher(unUtilisateur);
     }//GEN-LAST:event_bt_annuler_mdpActionPerformed
 
     private void bt_annulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_annulerActionPerformed
-        afficher(unUtil);
+        afficher(unUtilisateur);
     }//GEN-LAST:event_bt_annulerActionPerformed
 
     private void bt_enregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_enregistrerActionPerformed
         if(!ed_login.getText().isEmpty() && !ed_mail.getText().isEmpty()){
             try {
-                leControl.update_Compte(unUtil.getId(), ed_login.getText(), ed_mail.getText());
-                JOptionPane.showMessageDialog(null, "Votre compte a bien été mis à jour.", "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
+                leControl.update_Compte(unUtilisateur.getIdUtilisateur(),
+                        ed_login.getText(), ed_mail.getText());
+                JOptionPane.showMessageDialog(null, "Votre compte a bien été mis à jour.",
+                        "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
             } catch (SQLException ex) {
                 Logger.getLogger(V_MonCompte.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else{
-            lb_erreur.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bt_enregistrerActionPerformed
 
@@ -404,8 +378,6 @@ public class V_MonCompte extends javax.swing.JDialog {
     private javax.swing.JTextField ed_login;
     private javax.swing.JTextField ed_mail;
     private javax.swing.JLabel lb_conf_mp;
-    private javax.swing.JLabel lb_erreur;
-    private javax.swing.JLabel lb_erreur_mdp;
     private javax.swing.JLabel lb_login;
     private javax.swing.JLabel lb_mail;
     private javax.swing.JLabel lb_mp_actuel;

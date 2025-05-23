@@ -6,64 +6,77 @@ import java.util.LinkedHashMap;
 
 public class M_Role {
     private Db_mariadb db;
-    private String codeRole;
-    private String libelle;
+    private String strCodeRole;
+    private String strLibelle;
 
-    public M_Role(Db_mariadb db, String codeRole) throws SQLException {
+    public M_Role(Db_mariadb db, String strCodeRole) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM ROLES WHERE code_role = '" + codeRole + "'";
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM ROLES WHERE code_role = '" + strCodeRole + "'";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
-            this.codeRole = res.getString("code_role");
-            this.libelle = res.getString("libelle");
+            this.strCodeRole = res.getString("code_role");
+            this.strLibelle = res.getString("libelle");
         }
     }
 
-    public M_Role(Db_mariadb db, String codeRole, String libelle) throws SQLException {
+    public M_Role(Db_mariadb db, String strCodeRole, String strLibelle) throws SQLException {
         this.db = db;
-        this.codeRole = codeRole;
-        this.libelle = libelle;
+        this.strCodeRole = strCodeRole;
+        this.strLibelle = strLibelle;
 
-        String sql = "INSERT INTO ROLES (code_role, libelle) VALUES ('" + codeRole + "', '" + libelle + "')";
-        db.sqlExec(sql);
+        String strSql = "INSERT INTO ROLES (code_role, libelle) VALUES ('" + 
+                strCodeRole + "', '" + strLibelle + "')";
+        db.sqlExec(strSql);
     }
 
     public String getCodeRole() {
-        return codeRole;
+        return strCodeRole;
     }
 
     public String getLibelle() {
-        return libelle;
+        return strLibelle;
     }
 
     public void setLibelle(String libelle) {
-        this.libelle = libelle;
+        this.strLibelle = libelle;
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE ROLES SET libelle = '" + libelle + "' WHERE code_role = '" + codeRole + "'";
-        db.sqlExec(sql);
+        String strSql = "UPDATE ROLES SET libelle = '" + strLibelle +
+                "' WHERE code_role = '" + strCodeRole + "'";
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM ROLES WHERE code_role = '" + codeRole + "'");
+        String strSql = "DELETE FROM ROLES WHERE code_role = '" + strCodeRole + "'";
+        
+        db.sqlExec(strSql);
     }
 
     public static LinkedHashMap<String, M_Role> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<String, M_Role> roles = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM ROLES ORDER BY code_role");
+        LinkedHashMap<String, M_Role> lhmLesRoles = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM ROLES ORDER BY code_role";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            M_Role role = new M_Role(db, res.getString("code_role"));
-            roles.put(role.getCodeRole(), role);
+            M_Role unRole = new M_Role(db, res.getString("code_role"));
+            lhmLesRoles.put(unRole.getCodeRole(), unRole);
         }
-        return roles;
+        
+        return lhmLesRoles;
     }
 
     @Override
     public String toString() {
         return "M_Role{" +
-                "codeRole='" + codeRole + '\'' +
-                ", libelle='" + libelle + '\'' +
+                "codeRole='" + strCodeRole + '\'' +
+                ", libelle='" + strLibelle + '\'' +
                 '}';
     }
 }

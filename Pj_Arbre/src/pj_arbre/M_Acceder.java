@@ -6,85 +6,120 @@ import java.util.LinkedHashMap;
 
 public class M_Acceder {
     private Db_mariadb db;
-    private int idUtilisateur;
-    private int idArbre;
-    private String codeAcces;
+    private int iIdUtilisateur;
+    private int iIdArbre;
+    private String strCodeAcces;
 
-    public M_Acceder(Db_mariadb db, int idUtilisateur, int idArbre) throws SQLException {
+    public M_Acceder(Db_mariadb db, int iIdUtilisateur, int iIdArbre) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM ACCEDER WHERE id_utilisateur = " + idUtilisateur + " AND id_arbre = " + idArbre;
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM ACCEDER WHERE id_utilisateur = " + 
+                iIdUtilisateur + " AND id_arbre = " + iIdArbre;
+        
+        ResultSet res = db.sqlSelect(strSql);
         if (res.first()) {
-            this.idUtilisateur = idUtilisateur;
-            this.idArbre = idArbre;
-            this.codeAcces = res.getString("code_acces");
+            this.iIdUtilisateur = iIdUtilisateur;
+            this.iIdArbre = iIdArbre;
+            this.strCodeAcces = res.getString("code_acces");
         }
     }
 
-    public M_Acceder(Db_mariadb db, int idUtilisateur, int idArbre, String codeAcces) throws SQLException {
+    public M_Acceder(Db_mariadb db, int iIdUtilisateur, int iIdArbre,
+            String strCodeAcces) throws SQLException {
         this.db = db;
-        this.idUtilisateur = idUtilisateur;
-        this.idArbre = idArbre;
-        this.codeAcces = codeAcces;
-
-        String sql = "INSERT INTO ACCEDER (id_utilisateur, id_arbre, code_acces) VALUES (" 
-                        + idUtilisateur + ", " + idArbre + ", '" + codeAcces + "')";
+        this.iIdUtilisateur = iIdUtilisateur;
+        this.iIdArbre = iIdArbre;
+        this.strCodeAcces = strCodeAcces;
         
-        db.sqlExec(sql);
+        String strSql = "INSERT INTO ACCEDER (id_utilisateur, id_arbre, code_acces) VALUES (" 
+           + iIdUtilisateur + ", " + iIdArbre + ", '" + strCodeAcces + "') "
+           + "ON DUPLICATE KEY UPDATE code_acces = VALUES(code_acces)";
+        
+        db.sqlExec(strSql);
     }
 
-    public int getId() {
-        return idUtilisateur;
+    public int getIdUtilisateur() {
+        return iIdUtilisateur;
     }
 
     public int getIdArbre() {
-        return idArbre;
+        return iIdArbre;
     }
 
     public String getCodeAcces() {
-        return codeAcces;
+        return strCodeAcces;
+    }
+    
+    public void setIdUtilisateur(int iIdArbre) {
+        this.iIdArbre = iIdArbre;
     }
 
-    public void setIdArbre(int idArbre) {
-        this.idArbre = idArbre;
+    public void setIdArbre(int iIdArbre) {
+        this.iIdArbre = iIdArbre;
     }
 
-    public void setCodeAcces(String codeAcces) {
-        this.codeAcces = codeAcces;
+    public void setCodeAcces(String strCodeAcces) {
+        this.strCodeAcces = strCodeAcces;
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE ACCEDER SET id_arbre = " + idArbre + ", code_acces = '" + codeAcces + "' WHERE id_utilisateur = " + idUtilisateur;
-        db.sqlExec(sql);
+        String strSql = "UPDATE ACCEDER SET id_arbre = " + iIdArbre + 
+                ", code_acces = '" + strCodeAcces + 
+                "' WHERE id_utilisateur = " + iIdUtilisateur;
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        String sql = "DELETE FROM ACCEDER WHERE id_utilisateur = " + idUtilisateur;
-        db.sqlExec(sql);
+        String strSql = "DELETE FROM ACCEDER WHERE id_utilisateur = " + iIdUtilisateur;
+        
+        db.sqlExec(strSql);
     }
     
-    public static LinkedHashMap<Integer, M_Acceder> getAccesUtilisateur(Db_mariadb db, int idUtilisateur) throws SQLException {
-        LinkedHashMap<Integer, M_Acceder> lesAcces = new LinkedHashMap<>();
+    public static LinkedHashMap<Integer, M_Acceder> getAccesUtilisateur(Db_mariadb db, 
+            int iIdUtilisateur) throws SQLException {
+        LinkedHashMap<Integer, M_Acceder> lhmLesAcces = new LinkedHashMap<>();
 
-        String sql = "SELECT * FROM ACCEDER WHERE id_utilisateur = " + idUtilisateur + " ORDER BY id_arbre";
-        ResultSet res = db.sqlSelect(sql);
+        String strSql = "SELECT * FROM ACCEDER WHERE id_utilisateur = " + 
+                iIdUtilisateur + " ORDER BY id_arbre";
+        
+        ResultSet res = db.sqlSelect(strSql);
 
         while (res.next()) {
-            int id = res.getInt("id_utilisateur");
-            int idArbre = res.getInt("id_arbre");
-            M_Acceder unAcces = new M_Acceder(db, id, idArbre);
-            lesAcces.put(id, unAcces);
+            int iIdUtilisateurAcces = res.getInt("id_utilisateur");
+            int iIdArbreAcces = res.getInt("id_arbre");
+            M_Acceder unAcces = new M_Acceder(db, iIdUtilisateurAcces, iIdArbreAcces);
+            lhmLesAcces.put(iIdArbreAcces, unAcces);
         }
 
-        return lesAcces;
+        return lhmLesAcces;
     }
+    
+    public static LinkedHashMap<Integer, M_Acceder> getAccesPourArbre(Db_mariadb db, 
+            int iIdArbre) throws SQLException {
+        LinkedHashMap<Integer, M_Acceder> lhmLesAcces = new LinkedHashMap<>();
+
+        String strSql = "SELECT * FROM ACCEDER WHERE id_arbre = " + iIdArbre + 
+                " ORDER BY id_utilisateur";
+        
+        ResultSet res = db.sqlSelect(strSql);
+
+        while (res.next()) {
+            int iIdUtilisateur = res.getInt("id_utilisateur");
+            M_Acceder unAcces = new M_Acceder(db, iIdUtilisateur, iIdArbre);
+            lhmLesAcces.put(iIdUtilisateur, unAcces);
+        }
+
+        return lhmLesAcces;
+    }
+
 
     @Override
     public String toString() {
         return "M_Acceder{" +
-                "idUtilisateur=" + idUtilisateur +
-                ", idArbre=" + idArbre +
-                ", codeAcces='" + codeAcces + '\'' +
+                "idUtilisateur=" + iIdUtilisateur +
+                ", idArbre=" + iIdArbre +
+                ", codeAcces='" + strCodeAcces + '\'' +
                 '}';
     }
 }

@@ -7,122 +7,134 @@ import java.util.LinkedHashMap;
 
 public class M_Evenement {
     private Db_mariadb db;
-    private int idEvenement;
-    private LocalDate date;
-    private int idTypeEvenement;
-    private String lieu;
+    private int iIdEvenement;
+    private LocalDate dDate;
+    private int iIdTypeEvenement;
+    private String strLieu;
 
-    public M_Evenement(Db_mariadb db, int idEvenement) throws SQLException {
+    public M_Evenement(Db_mariadb db, int iIdEvenement) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM EVENEMENTS WHERE id_evenement = " + idEvenement;
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM EVENEMENTS WHERE id_evenement = " + iIdEvenement;
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         if (res.first()) {
-            this.idEvenement = idEvenement;
-            this.date = res.getObject("date", LocalDate.class);
-            this.idTypeEvenement = res.getInt("id_type_evenement");
-            this.lieu = res.getString("lieu");
+            this.iIdEvenement = iIdEvenement;
+            this.dDate = res.getObject("date", LocalDate.class);
+            this.iIdTypeEvenement = res.getInt("id_type_evenement");
+            this.strLieu = res.getString("lieu");
         }
     }
 
-    public M_Evenement(Db_mariadb db, LocalDate date, int idTypeEvenement, String lieu) throws SQLException {
+    public M_Evenement(Db_mariadb db, LocalDate dDate, int iIdTypeEvenement, String strLieu)
+            throws SQLException {
         this.db = db;
-        this.date = date;
-        this.idTypeEvenement = idTypeEvenement;
-        this.lieu = lieu;
+        this.dDate = dDate;
+        this.iIdTypeEvenement = iIdTypeEvenement;
+        this.strLieu = strLieu;
 
-        String sql = "INSERT INTO EVENEMENTS (date, id_type_evenement, lieu) VALUES (" +
-                (date != null ? "'" + date + "'" : "NULL") + ", " +
-                idTypeEvenement + ", " +
-                (lieu != null ? "'" + lieu.replace("'", "''") + "'" : "NULL") + ")";
-        db.sqlExec(sql);
-
+        String strSql = "INSERT INTO EVENEMENTS (date, id_type_evenement, lieu) VALUES ('" +
+                dDate + "', '" + iIdTypeEvenement + "', '" + strLieu + "')";
+        
+        db.sqlExec(strSql);
+        
         ResultSet res = db.sqlLastId();
+        
         if (res.first()) {
-            this.idEvenement = res.getInt(1);
+            this.iIdEvenement = res.getInt(1);
         }
     }
 
     public int getIdEvenement() {
-        return idEvenement;
+        return iIdEvenement;
     }
 
     public LocalDate getDate() {
-        return date;
+        return dDate;
     }
 
     public int getIdTypeEvenement() {
-        return idTypeEvenement;
+        return iIdTypeEvenement;
     }
 
     public String getLieu() {
-        return lieu;
+        return strLieu;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDate(LocalDate dDate) {
+        this.dDate = dDate;
     }
 
-    public void setIdTypeEvenement(int idTypeEvenement) {
-        this.idTypeEvenement = idTypeEvenement;
+    public void setIdTypeEvenement(int iIdTypeEvenement) {
+        this.iIdTypeEvenement = iIdTypeEvenement;
     }
 
-    public void setLieu(String lieu) {
-        this.lieu = lieu;
+    public void setLieu(String strLieu) {
+        this.strLieu = strLieu;
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE EVENEMENTS SET " +
-                "date = " + (date != null ? "'" + date + "'" : "NULL") + ", " +
-                "id_type_evenement = " + idTypeEvenement + ", " +
-                "lieu = " + (lieu != null ? "'" + lieu.replace("'", "''") + "'" : "NULL") +
-                " WHERE id_evenement = " + idEvenement;
-        db.sqlExec(sql);
+        String strSql = "UPDATE EVENEMENTS SET " +
+                "date = " + dDate + ", " + "id_type_evenement = " + 
+                iIdTypeEvenement + ", lieu = " + strLieu +
+                " WHERE id_evenement = " + iIdEvenement;
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        String sql = "DELETE FROM EVENEMENTS WHERE id_evenement = " + idEvenement;
-        db.sqlExec(sql);
+        String strSql = "DELETE FROM EVENEMENTS WHERE id_evenement = "
+                + iIdEvenement;
+        
+        db.sqlExec(strSql);
     }
 
-    public static LinkedHashMap<Integer, M_Evenement> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<Integer, M_Evenement> evenements = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT id_evenement FROM EVENEMENTS ORDER BY date");
+    public static LinkedHashMap<Integer, M_Evenement> getRecords(Db_mariadb db) 
+            throws SQLException {
+        LinkedHashMap<Integer, M_Evenement> lhmLesEvenements = new LinkedHashMap<>();
+        
+        String strSql = "SELECT id_evenement FROM EVENEMENTS ORDER BY date";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            int id = res.getInt("id_evenement");
-            M_Evenement e = new M_Evenement(db, id);
-            evenements.put(id, e);
+            int iIdEvenement = res.getInt("id_evenement");
+            M_Evenement unEvenement = new M_Evenement(db, iIdEvenement);
+            lhmLesEvenements.put(iIdEvenement, unEvenement);
         }
-        return evenements;
+        
+        return lhmLesEvenements;
     }
 
-    public static LinkedHashMap<Integer, M_Evenement> getEvenementPourIndividu(Db_mariadb db, int idMembre) throws SQLException {
-        LinkedHashMap<Integer, M_Evenement> lesEvenements = new LinkedHashMap<>();
+    public static LinkedHashMap<Integer, M_Evenement> getEvenementPourIndividu
+        (Db_mariadb db, int iIdIndividu) throws SQLException {
+        LinkedHashMap<Integer, M_Evenement> lhmLesEvenements = new LinkedHashMap<>();
 
-        String sql = "SELECT e.id_evenement " +
+        String strSql = "SELECT e.id_evenement " +
                      "FROM EVENEMENTS e " +
                      "JOIN AVOIR_EVENEMENT ae ON e.id_evenement = ae.id_evenement " +
-                     "WHERE ae.id_individu = " + idMembre + " " +
+                     "WHERE ae.id_individu = " + iIdIndividu + " " +
                      "ORDER BY e.date";
 
-        ResultSet res = db.sqlSelect(sql);
+        ResultSet res = db.sqlSelect(strSql);
 
         while (res.next()) {
-            int id = res.getInt("id_evenement");
-            M_Evenement unEvenement = new M_Evenement(db, id);
-            lesEvenements.put(id, unEvenement);
+            int iIdEvenement = res.getInt("id_evenement");
+            M_Evenement unEvenement = new M_Evenement(db, iIdEvenement);
+            lhmLesEvenements.put(iIdEvenement, unEvenement);
         }
 
-        return lesEvenements;
+        return lhmLesEvenements;
     }
-
     
     @Override
     public String toString() {
         return "M_Evenement{" +
-                "idEvenement=" + idEvenement +
-                ", date=" + date +
-                ", idTypeEvenement=" + idTypeEvenement +
-                ", lieu='" + lieu + '\'' +
+                "idEvenement=" + iIdEvenement +
+                ", date=" + dDate +
+                ", idTypeEvenement=" + iIdTypeEvenement +
+                ", lieu='" + strLieu + '\'' +
                 '}';
     }
 }

@@ -6,82 +6,100 @@ import java.util.LinkedHashMap;
 
 public class M_Action {
     private Db_mariadb db;
-    private String codeAction;
-    private String libelle;
+    private String strCodeAction;
+    private String strLibelle;
 
-    public M_Action(Db_mariadb db, String codeAction) throws SQLException {
+    public M_Action(Db_mariadb db, String strCodeAction) throws SQLException {
         this.db = db;
-        String sql = "SELECT * FROM ACTIONS WHERE code_action = '" + codeAction + "'";
-        ResultSet res = db.sqlSelect(sql);
+        
+        String strSql = "SELECT * FROM ACTIONS WHERE code_action = '" + strCodeAction + "'";
+        
+        ResultSet res = db.sqlSelect(strSql);
         if (res.first()) {
-            this.codeAction = res.getString("code_action");
-            this.libelle = res.getString("libelle");
-        } else {
-            throw new SQLException("Aucune action trouvée avec le code : " + codeAction);
+            this.strCodeAction = res.getString("code_action");
+            this.strLibelle = res.getString("libelle");
         }
     }
 
-    public M_Action(Db_mariadb db, String codeAction, String libelle) throws SQLException {
+    public M_Action(Db_mariadb db, String strCodeAction, String strLibelle) 
+            throws SQLException {
         this.db = db;
-        this.codeAction = codeAction;
-        this.libelle = libelle;
+        this.strCodeAction = strCodeAction;
+        this.strLibelle = strLibelle;
 
-        String sql = "INSERT INTO ACTIONS (code_action, libelle) VALUES ('" + codeAction + "', '" + libelle + "')";
+        String sql = "INSERT INTO ACTIONS (code_action, libelle) VALUES ('" + 
+                strCodeAction + "', '" + strLibelle + "')";
+        
         db.sqlExec(sql);
     }
 
     public String getCodeAction() {
-        return codeAction;
+        return strCodeAction;
     }
 
     public String getLibelle() {
-        return libelle;
+        return strLibelle;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setLibelle(String strLibelle) {
+        this.strLibelle = strLibelle;
     }
 
     public void update() throws SQLException {
-        String sql = "UPDATE ACTIONS SET libelle = '" + libelle + "' WHERE code_action = '" + codeAction + "'";
-        db.sqlExec(sql);
+        String strSql = "UPDATE ACTIONS SET libelle = '" + strLibelle +
+                "' WHERE code_action = '" + strCodeAction + "'";
+        
+        db.sqlExec(strSql);
     }
 
     public void delete() throws SQLException {
-        db.sqlExec("DELETE FROM ACTIONS WHERE code_action = '" + codeAction + "'");
+        String strSql = "DELETE FROM ACTIONS WHERE code_action = '" +
+                strCodeAction + "'";
+        
+        db.sqlExec(strSql);
     }
 
-    public static LinkedHashMap<String, M_Action> getRecords(Db_mariadb db) throws SQLException {
-        LinkedHashMap<String, M_Action> actions = new LinkedHashMap<>();
-        ResultSet res = db.sqlSelect("SELECT * FROM ACTIONS ORDER BY libelle");
+    public static LinkedHashMap<String, M_Action> getRecords(Db_mariadb db) 
+            throws SQLException {
+        LinkedHashMap<String, M_Action> lhmLesActions = new LinkedHashMap<>();
+        
+        String strSql = "SELECT * FROM ACTIONS ORDER BY libelle";
+        
+        ResultSet res = db.sqlSelect(strSql);
+        
         while (res.next()) {
-            String codeAction = res.getString("code_action");
-            M_Action action = new M_Action(db, codeAction);
-            actions.put(codeAction, action);
+            String strCodeAction = res.getString("code_action");
+            M_Action uneAction = new M_Action(db, strCodeAction);
+            lhmLesActions.put(strCodeAction, uneAction);
         }
-        return actions;
+        
+        return lhmLesActions;
     }
 
-    public static LinkedHashMap<String, M_Action> getActionsPourRole(Db_mariadb db, String codeRole) throws SQLException {
-        LinkedHashMap<String, M_Action> actions = new LinkedHashMap<>();
+    public static LinkedHashMap<String, M_Action> getActionsPourRole(Db_mariadb db, String strCodeRole) throws SQLException {
+        LinkedHashMap<String, M_Action> lhmLesActions = new LinkedHashMap<>();
+        
         String sql = "SELECT a.code_action FROM ACTIONS a " +
                      "JOIN AUTORISER au ON a.code_action = au.code_action " +
-                     "WHERE au.code_role = '" + codeRole + "' " +
+                     "WHERE au.code_role = '" + strCodeRole + "' " +
                      "ORDER BY a.libelle";
+        
         ResultSet res = db.sqlSelect(sql);
+        
         while (res.next()) {
-            String codeAction = res.getString("code_action");
-            M_Action action = new M_Action(db, codeAction);
-            actions.put(codeAction, action);
+            String strCodeRoleAction = res.getString("code_action");
+            M_Action uneAction = new M_Action(db, strCodeRoleAction);
+            lhmLesActions.put(strCodeRoleAction, uneAction);
         }
-        return actions;
+        
+        return lhmLesActions;
     }
 
     @Override
     public String toString() {
         return "M_Action{" +
-                "codeAction='" + codeAction + '\'' +
-                ", libelle='" + libelle + '\'' +
+                "codeAction='" + strCodeAction + '\'' +
+                ", libelle='" + strLibelle + '\'' +
                 '}';
     }
 }

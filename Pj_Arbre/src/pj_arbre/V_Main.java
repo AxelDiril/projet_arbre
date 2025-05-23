@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,7 +21,7 @@ import javax.swing.JMenuItem;
  */
 public class V_Main extends javax.swing.JFrame {
 
-    private M_Utilisateur utilConnecte;
+    private M_Utilisateur unUtilisateurConnecte;
     private C_Arbre leControl;
     private Map<String, Object> menuMap = new HashMap<>();
     private JMenu mn;
@@ -40,11 +41,12 @@ public class V_Main extends javax.swing.JFrame {
     }
 
     private void aff_menus(M_Utilisateur unUtil) throws SQLException {
-        LinkedHashMap<String, M_Action> lesActions = leControl.actions_Util(unUtil);
-        for (String cle : lesActions.keySet()) {
-            M_Action uneAction = lesActions.get(cle);
+        LinkedHashMap<String, M_Action> lhmLesActions = leControl.actions_Util(unUtil);
+        for (String strCle : lhmLesActions.keySet()) {
+            M_Action uneAction = lhmLesActions.get(strCle);
             String code = uneAction.getCodeAction();
             String classe = menuMap.get(code).getClass().toString();
+            
             if (classe.equals("class javax.swing.JMenu")) {
                 JMenu menu = (JMenu) menuMap.get(code);
                 menu.setVisible(true);
@@ -56,9 +58,8 @@ public class V_Main extends javax.swing.JFrame {
     }
 
     public void afficher() {
-        lb_message.setVisible(false);
         pn_connect.setVisible(true);
-        this.setTitle("Application Arbre");
+        pn_accueil.setVisible(false);
         this.setLocationRelativeTo(null);
         scanMenus(mb_menu);
         this.setVisible(true);
@@ -84,9 +85,10 @@ public class V_Main extends javax.swing.JFrame {
         ed_login = new javax.swing.JTextField();
         lb_mdp = new javax.swing.JLabel();
         bt_connect = new javax.swing.JButton();
-        lb_message = new javax.swing.JLabel();
         pw_mdp = new javax.swing.JPasswordField();
         bt_inscription = new javax.swing.JButton();
+        pn_accueil = new javax.swing.JPanel();
+        lb_bonjour = new javax.swing.JLabel();
         mb_menu = new javax.swing.JMenuBar();
         mn_compte = new javax.swing.JMenu();
         mi_parametres = new javax.swing.JMenuItem();
@@ -97,9 +99,17 @@ public class V_Main extends javax.swing.JFrame {
         mi_utilisateurs = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Accueil");
+        setTitle("Application Arbre");
+        setResizable(false);
+        getContentPane().setLayout(new java.awt.CardLayout());
 
         lb_login.setText("Login :");
+
+        ed_login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ed_loginActionPerformed(evt);
+            }
+        });
 
         lb_mdp.setText("Mdp :");
 
@@ -109,9 +119,6 @@ public class V_Main extends javax.swing.JFrame {
                 bt_connectActionPerformed(evt);
             }
         });
-
-        lb_message.setForeground(new java.awt.Color(204, 0, 0));
-        lb_message.setText("Erreur de connexion");
 
         bt_inscription.setText("Inscription");
         bt_inscription.addActionListener(new java.awt.event.ActionListener() {
@@ -125,46 +132,65 @@ public class V_Main extends javax.swing.JFrame {
         pn_connectLayout.setHorizontalGroup(
             pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pn_connectLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
                 .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pn_connectLayout.createSequentialGroup()
-                        .addGap(92, 92, 92)
-                        .addComponent(lb_message))
-                    .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pn_connectLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(bt_connect)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                            .addComponent(bt_inscription))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pn_connectLayout.createSequentialGroup()
-                            .addGap(34, 34, 34)
-                            .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lb_login)
-                                .addComponent(lb_mdp))
-                            .addGap(32, 32, 32)
-                            .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(ed_login, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                                .addComponent(pw_mdp)))))
-                .addContainerGap(36, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lb_login)
+                            .addComponent(lb_mdp))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ed_login)
+                            .addComponent(pw_mdp, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pn_connectLayout.createSequentialGroup()
+                        .addComponent(bt_connect)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bt_inscription)
+                        .addGap(34, 34, 34)))
+                .addGap(44, 44, 44))
         );
         pn_connectLayout.setVerticalGroup(
             pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pn_connectLayout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
-                .addComponent(lb_message)
                 .addGap(18, 18, 18)
                 .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_login)
                     .addComponent(ed_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_mdp)
                     .addComponent(pw_mdp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                .addGap(24, 24, 24)
                 .addGroup(pn_connectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bt_connect)
                     .addComponent(bt_inscription))
-                .addGap(32, 32, 32))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getContentPane().add(pn_connect, "card2");
+
+        lb_bonjour.setFont(new java.awt.Font("sansserif", 0, 36)); // NOI18N
+        lb_bonjour.setText("Bonjour");
+
+        javax.swing.GroupLayout pn_accueilLayout = new javax.swing.GroupLayout(pn_accueil);
+        pn_accueil.setLayout(pn_accueilLayout);
+        pn_accueilLayout.setHorizontalGroup(
+            pn_accueilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pn_accueilLayout.createSequentialGroup()
+                .addGap(73, 73, 73)
+                .addComponent(lb_bonjour)
+                .addContainerGap(203, Short.MAX_VALUE))
+        );
+        pn_accueilLayout.setVerticalGroup(
+            pn_accueilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pn_accueilLayout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addComponent(lb_bonjour)
+                .addGap(75, 75, 75))
+        );
+
+        getContentPane().add(pn_accueil, "card4");
 
         mn_compte.setText("Compte");
         mn_compte.setName("mn_compte"); // NOI18N
@@ -208,49 +234,42 @@ public class V_Main extends javax.swing.JFrame {
 
         mi_utilisateurs.setText("Liste des utilisateurs");
         mi_utilisateurs.setName("mi_utilisateurs"); // NOI18N
+        mi_utilisateurs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_utilisateursActionPerformed(evt);
+            }
+        });
         mn_admin.add(mi_utilisateurs);
 
         mb_menu.add(mn_admin);
 
         setJMenuBar(mb_menu);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(pn_connect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(pn_connect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_connectActionPerformed
 
-        String login = ed_login.getText();
-        String mdp = pw_mdp.getText();
+        String strLogin = ed_login.getText();
+        String strMdp = pw_mdp.getText();
         try {
-            utilConnecte = leControl.verif_utilisateur(login, mdp);
+            unUtilisateurConnecte = leControl.verif_utilisateur(strLogin, strMdp);
         } catch (SQLException ex) {
             Logger.getLogger(V_Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (utilConnecte == null) {
+        if (unUtilisateurConnecte == null) {
             afficher();
-            lb_message.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Identifiant ou mot de passe "
+                    + "incorrect. Veuillez réessayer.","Erreur",JOptionPane.ERROR_MESSAGE);
+            ed_login.setText("");
+            pw_mdp.setText("");
         } else {
             pn_connect.setVisible(false);
+            pn_accueil.setVisible(true);
+            lb_bonjour.setText("Bonjour, " + unUtilisateurConnecte.getLogin() + ".");
             try {
-                aff_menus(utilConnecte);
+                aff_menus(unUtilisateurConnecte);
             } catch (SQLException ex) {
                 Logger.getLogger(V_Main.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -285,6 +304,18 @@ public class V_Main extends javax.swing.JFrame {
             Logger.getLogger(V_Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_mi_arbresActionPerformed
+
+    private void mi_utilisateursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_utilisateursActionPerformed
+        try {
+            leControl.aff_V_Utilisateurs();
+        } catch (SQLException ex) {
+            Logger.getLogger(V_Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mi_utilisateursActionPerformed
+
+    private void ed_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ed_loginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ed_loginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -325,9 +356,9 @@ public class V_Main extends javax.swing.JFrame {
     private javax.swing.JButton bt_connect;
     private javax.swing.JButton bt_inscription;
     private javax.swing.JTextField ed_login;
+    private javax.swing.JLabel lb_bonjour;
     private javax.swing.JLabel lb_login;
     private javax.swing.JLabel lb_mdp;
-    private javax.swing.JLabel lb_message;
     private javax.swing.JMenuBar mb_menu;
     private javax.swing.JMenuItem mi_arbres;
     private javax.swing.JMenuItem mi_creer;
@@ -336,6 +367,7 @@ public class V_Main extends javax.swing.JFrame {
     private javax.swing.JMenu mn_admin;
     private javax.swing.JMenu mn_arbres;
     private javax.swing.JMenu mn_compte;
+    private javax.swing.JPanel pn_accueil;
     private javax.swing.JPanel pn_connect;
     private javax.swing.JPasswordField pw_mdp;
     // End of variables declaration//GEN-END:variables
